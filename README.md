@@ -126,3 +126,8 @@ docker compose down
 ```bash
 docker compose down -v
 ```
+
+"token": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ1c2VyMSIsInVzZXJJZCI6MiwiaWF0IjoxNzcxNTE3OTM1LCJleHAiOjE3NzE2MDQzMzV9.nw_50v8uNNg-xN5wrjZ5a5-AXg3JA7KGy6RO3fT-v4bsALHvL1iu8FcffDlqIomL"
+
+
+"login":"user1"
