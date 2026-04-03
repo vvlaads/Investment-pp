@@ -34,7 +34,7 @@ export default function LoginScreen({ navigation }) {
                     styles.button,
                     pressed ? styles.buttonHover : null
                 ]}
-                onPress={() => alert('Вход выполнен')}
+                onPress={() => navigation.navigate('Portfolio')}
             >
                 <Text style={styles.buttonText}>Войти</Text>
             </Pressable>
