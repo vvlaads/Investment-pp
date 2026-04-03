@@ -3,7 +3,7 @@ import { fontSizes, fontWeights, typography } from '../theme/typography';
 import { colors } from '../theme/colors';
 import logo from '../assets/logo.png'
 
-export default function RegisterScreen() {
+export default function RegisterScreen({ navigation }) {
     const { width } = useWindowDimensions(); // ширина экрана
     const logoWidth = width < 400 ? width * 0.8 : 400;
 
