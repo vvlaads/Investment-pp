@@ -1,6 +1,8 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../theme/typography';
 import { colors } from '../theme/colors';
+import LinkButton from '../components/LinkButton';
+import arrow from '../assets/icons/portfolio white.png'
 
 export default function ProfileScreen({ navigation }) {
     return (
@@ -27,7 +29,7 @@ export default function ProfileScreen({ navigation }) {
             <View style={styles.body}>
                 <Text style={typography.subtitle}>Операции</Text>
                 <View style={styles.optionContainer}>
-
+                    <LinkButton label={'Пополнить'} description={'Пополнить счет'} icon={arrow} />
                 </View>
 
                 <Text style={typography.subtitle}>Настройки</Text>
