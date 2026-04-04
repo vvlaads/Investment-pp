@@ -35,7 +35,7 @@ export default function RegisterScreen({ navigation }) {
                     styles.button,
                     pressed ? styles.buttonHover : null
                 ]}
-                onPress={() => navigation.navigate('Portfolio')}
+                onPress={() => navigation.replace('Main')}
             >
                 <Text style={styles.buttonText}>Зарегистрироваться</Text>
             </Pressable>

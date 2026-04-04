@@ -34,7 +34,7 @@ export default function LoginScreen({ navigation }) {
                     styles.button,
                     pressed ? styles.buttonHover : null
                 ]}
-                onPress={() => navigation.navigate('Portfolio')}
+                onPress={() => navigation.replace('Main')}
             >
                 <Text style={styles.buttonText}>Войти</Text>
             </Pressable>
