@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../theme/typography';
 import { colors } from '../theme/colors';
 import LinkButton from '../components/LinkButton';
@@ -6,7 +6,8 @@ import arrow from '../assets/icons/portfolio white.png'
 
 export default function ProfileScreen({ navigation }) {
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}
+            showsVerticalScrollIndicator={false}>
             <View style={styles.header}>
                 <Text style={[typography.title, { color: colors.white, marginTop: 50, marginBottom: 20 }]}>
                     Иванов Алексей Владимирович
@@ -26,15 +27,22 @@ export default function ProfileScreen({ navigation }) {
 
 
             </View>
+
+
             <View style={styles.body}>
-                <Text style={typography.subtitle}>Операции</Text>
+                <Text style={[typography.subtitle, styles.sectionName]}>Операции</Text>
+
                 <View style={styles.optionContainer}>
-                    <LinkButton label={'Пополнить'} description={'Пополнить счет'} icon={arrow} />
+                    <LinkButton label={'Пополнить'} description={'Пополнить счет'} icon={arrow} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Пополнить'} description={'Пополнить счет'} icon={arrow} pageName={'Portfolio'} navigation={navigation} />
                 </View>
 
-                <Text style={typography.subtitle}>Настройки</Text>
-                <View style={styles.optionContainer}>
+                <Text style={[typography.subtitle, styles.sectionName]}>Настройки</Text>
 
+                <View style={styles.optionContainer}>
+                    <LinkButton label={'Настройки'} description={'Персонализация приложения'} icon={arrow} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Уведомления'} description={'Управление уведомлениями'} icon={arrow} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Помощь'} description={'Центр поддержки'} icon={arrow} pageName={'Portfolio'} navigation={navigation} />
                 </View>
 
                 <Pressable
@@ -47,7 +55,7 @@ export default function ProfileScreen({ navigation }) {
                     <Text style={styles.buttonText}>Выйти из аккаунта</Text>
                 </Pressable>
             </View>
-        </View >
+        </ ScrollView>
     );
 }
 
@@ -57,15 +65,16 @@ const styles = StyleSheet.create({
     },
     header: {
         backgroundColor: colors.main,
-        height: 350,
+        height: 320,
         padding: 20,
         borderBottomLeftRadius: 20,
         borderBottomRightRadius: 20,
     },
     body: {
-        padding: 20,
-        justifyContent: 'top',
+        flex: 1,
         backgroundColor: colors.background,
+        padding: 20,
+        paddingBottom: 200,
     },
     block: {
         backgroundColor: colors.white,
@@ -81,7 +90,14 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'space-between'
     },
-    optionContainer: {},
+    sectionName: {
+        marginBottom: 20,
+    },
+    optionContainer: {
+        flexDirection: 'column',
+        gap: 20,
+        marginBottom: 50,
+    },
     button: {
         backgroundColor: colors.white,
         paddingVertical: 12,

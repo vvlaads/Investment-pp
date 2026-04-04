@@ -1,11 +1,17 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { colors } from "../theme/colors";
 import { fontSizes, fontWeights, typography } from "../theme/typography";
 import arrow from '../assets/icons/portfolio white.png'
 
-export default function LinkButton({ label, description, icon }) {
+export default function LinkButton({ label, description, icon, pageName, navigation }) {
     return (
-        <View style={styles.container}>
+        <Pressable
+            style={({ pressed }) => [
+                styles.container,
+                pressed ? { backgroundColor: colors.grayLight } : null
+            ]}
+            onPress={() => navigation.navigate(pageName)}
+        >
             <View style={styles.imageContainer}>
                 <Image
                     source={icon}
@@ -24,7 +30,7 @@ export default function LinkButton({ label, description, icon }) {
                     style={styles.arrow} />
             </View>
 
-        </View>
+        </Pressable>
     );
 }
 
