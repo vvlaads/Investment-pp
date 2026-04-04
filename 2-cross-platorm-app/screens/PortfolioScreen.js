@@ -1,11 +1,14 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../theme/typography';
 import { colors } from '../theme/colors';
 import { formatValue } from '../utils/formatValue';
+import AssetCard from '../components/AssetCard';
+import arrow from '../assets/icons/portfolio white.png'
 
 export default function PortfolioScreen() {
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}
+            showsVerticalScrollIndicator={false}>
             <View style={styles.header}>
                 <Text style={[typography.title, { color: colors.white, marginTop: 50, marginBottom: 20 }]}>
                     Портфель
@@ -40,9 +43,18 @@ export default function PortfolioScreen() {
 
             </View>
             <View style={styles.body}>
-                <Text style={typography.subtitle}>Мои активы</Text>
+                <Text style={[typography.subtitle, { marginBottom: 20 }]}>Мои активы</Text>
+
+                <View style={styles.assetsContainer}>
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
+                </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
@@ -61,6 +73,7 @@ const styles = StyleSheet.create({
         padding: 20,
         justifyContent: 'top',
         backgroundColor: colors.background,
+        paddingBottom: 200,
     },
     block: {
         backgroundColor: colors.white,
@@ -89,5 +102,9 @@ const styles = StyleSheet.create({
         marginTop: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
-    }
+    },
+    assetsContainer: {
+        flexDirection: 'column',
+        gap: 10,
+    },
 });
