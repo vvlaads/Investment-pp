@@ -9,6 +9,12 @@ const menuConfig = {
             inactive: require('../assets/icons/gray/portfolio.png'),
         },
     },
+    Market: {
+        icons: {
+            active: require('../assets/icons/white/dollar.png'),
+            inactive: require('../assets/icons/gray/dollar.png'),
+        },
+    },
     Profile: {
         icons: {
             active: require('../assets/icons/white/profile.png'),
@@ -74,6 +80,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         alignItems: 'center',
         height: '100%',
+        width: 80,
     },
     buttonHover: {
         backgroundColor: colors.grayLight,
