@@ -1,8 +1,21 @@
 import { Pressable, View, StyleSheet, Text, Image } from "react-native";
 import { colors } from "../theme/colors";
 import { fontSizes, fontWeights } from "../theme/typography";
-import portfolioWhite from '../assets/icons/portfolio white.png'
-import portfolioGray from '../assets/icons/portfolio white.png'
+
+const menuConfig = {
+    Portfolio: {
+        icons: {
+            active: require('../assets/icons/white/portfolio.png'),
+            inactive: require('../assets/icons/gray/portfolio.png'),
+        },
+    },
+    Profile: {
+        icons: {
+            active: require('../assets/icons/white/profile.png'),
+            inactive: require('../assets/icons/gray/profile.png'),
+        },
+    },
+}
 
 export default function Menu({ state, navigation, descriptors }) {
     return (
@@ -12,8 +25,8 @@ export default function Menu({ state, navigation, descriptors }) {
 
                 const { options } = descriptors[route.key];
 
-                const label =
-                    options.title || route.name;
+                const label = options.title || route.name;
+                const icons = menuConfig[route.name].icons
 
                 return (
                     <Pressable
@@ -26,7 +39,7 @@ export default function Menu({ state, navigation, descriptors }) {
                         onPress={() => navigation.navigate(route.name)}
                     >
                         <Image
-                            source={isActive ? portfolioWhite : portfolioGray}
+                            source={isActive ? icons.active : icons.inactive}
                             style={styles.buttonImage}
                         />
                         <Text style={[styles.buttonText, isActive ? styles.buttonTextActive : null]}>

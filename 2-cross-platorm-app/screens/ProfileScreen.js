@@ -1,8 +1,13 @@
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../theme/typography';
 import { colors } from '../theme/colors';
 import LinkButton from '../components/LinkButton';
-import arrow from '../assets/icons/portfolio white.png'
+import card from '../assets/icons/blue/Credit-card.png'
+import send from '../assets/icons/blue/Send.png'
+import settings from '../assets/icons/blue/Settings.png'
+import notification from '../assets/icons/blue/Bell.png'
+import help from '../assets/icons/blue/Help-circle.png'
+import logOut from '../assets/icons/red/Log-out.png'
 
 export default function ProfileScreen({ navigation }) {
     return (
@@ -33,16 +38,16 @@ export default function ProfileScreen({ navigation }) {
                 <Text style={[typography.subtitle, styles.sectionName]}>Операции</Text>
 
                 <View style={styles.optionContainer}>
-                    <LinkButton label={'Пополнить'} description={'Пополнить счет'} icon={arrow} pageName={'Portfolio'} navigation={navigation} />
-                    <LinkButton label={'Пополнить'} description={'Пополнить счет'} icon={arrow} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Пополнить'} description={'Пополнить счет'} icon={card} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Вывести'} description={'Перевод на другой счет'} icon={send} pageName={'Portfolio'} navigation={navigation} />
                 </View>
 
                 <Text style={[typography.subtitle, styles.sectionName]}>Настройки</Text>
 
                 <View style={styles.optionContainer}>
-                    <LinkButton label={'Настройки'} description={'Персонализация приложения'} icon={arrow} pageName={'Portfolio'} navigation={navigation} />
-                    <LinkButton label={'Уведомления'} description={'Управление уведомлениями'} icon={arrow} pageName={'Portfolio'} navigation={navigation} />
-                    <LinkButton label={'Помощь'} description={'Центр поддержки'} icon={arrow} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Настройки'} description={'Персонализация приложения'} icon={settings} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Уведомления'} description={'Управление уведомлениями'} icon={notification} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Помощь'} description={'Центр поддержки'} icon={help} pageName={'Portfolio'} navigation={navigation} />
                 </View>
 
                 <Pressable
@@ -52,6 +57,10 @@ export default function ProfileScreen({ navigation }) {
                     ]}
                     onPress={() => navigation.replace('Login')}
                 >
+                    <Image
+                        style={{ width: 24, height: 24 }}
+                        source={logOut}
+                    />
                     <Text style={styles.buttonText}>Выйти из аккаунта</Text>
                 </Pressable>
             </View>
@@ -106,6 +115,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.red,
         alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 10,
     },
     buttonHover: {
         backgroundColor: colors.grayLight,

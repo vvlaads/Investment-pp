@@ -1,7 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { colors } from "../theme/colors";
 import { fontSizes, fontWeights, typography } from "../theme/typography";
-import arrow from '../assets/icons/portfolio white.png'
+import arrow from '../assets/icons/gray/Chevron right.png'
 
 export default function LinkButton({ label, description, icon, pageName, navigation }) {
     return (

@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../theme/typography';
 import { colors } from '../theme/colors';
 import { formatValue } from '../utils/formatValue';
 import AssetCard from '../components/AssetCard';
-import arrow from '../assets/icons/portfolio white.png'
+import arrow from '../assets/icons/white/portfolio.png'
+import plus from '../assets/icons/black/Plus-circle.png'
+import send from '../assets/icons/black/Send.png'
 
 export default function PortfolioScreen() {
     return (
@@ -27,6 +29,10 @@ export default function PortfolioScreen() {
                         ]}
                         onPress={() => alert('Click')}
                     >
+                        <Image
+                            style={styles.icon}
+                            source={plus}
+                        />
                         <Text style={styles.buttonText}>Пополнить</Text>
                     </Pressable>
                     <Pressable
@@ -36,6 +42,10 @@ export default function PortfolioScreen() {
                         ]}
                         onPress={() => alert('Click')}
                     >
+                        <Image
+                            style={styles.icon}
+                            source={send}
+                        />
                         <Text style={styles.buttonText}>Вывести</Text>
                     </Pressable>
                 </View>
@@ -89,6 +99,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '45%',
         height: 60,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 10,
     },
     buttonHover: {
         backgroundColor: colors.grayLight,
@@ -106,5 +119,9 @@ const styles = StyleSheet.create({
     assetsContainer: {
         flexDirection: 'column',
         gap: 10,
+    },
+    icon: {
+        width: 24,
+        height: 24,
     },
 });
