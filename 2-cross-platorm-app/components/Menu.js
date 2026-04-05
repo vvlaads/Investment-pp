@@ -15,6 +15,12 @@ const menuConfig = {
             inactive: require('../assets/icons/gray/dollar.png'),
         },
     },
+    Analytics: {
+        icons: {
+            active: require('../assets/icons/white/bars.png'),
+            inactive: require('../assets/icons/gray/bars.png'),
+        },
+    },
     Profile: {
         icons: {
             active: require('../assets/icons/white/profile.png'),

@@ -11,4 +11,5 @@ export const colors = {
     red: '#FB2C5D',
     orange: '#F97316',
     pink: '#EC4899',
+    purple: '#9747FF',
 };
