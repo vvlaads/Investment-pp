@@ -3,7 +3,7 @@ import { typography } from '../theme/typography';
 import { colors } from '../theme/colors';
 import AssetCard from '../components/AssetCard';
 import arrow from '../assets/icons/white/portfolio.png'
-export default function MarketScreen() {
+export default function MarketScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}
             showsVerticalScrollIndicator={false}>
@@ -18,12 +18,12 @@ export default function MarketScreen() {
                 <Text style={[typography.subtitle, { marginBottom: 20 }]}>Выгодные предложения</Text>
 
                 <View style={styles.assetsContainer}>
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
                 </View>
             </View>
         </ScrollView>

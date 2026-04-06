@@ -2,14 +2,14 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { colors } from "../theme/colors";
 import { fontSizes, fontWeights, typography } from "../theme/typography";
 
-export default function AssetCard({ companyName, amount, pricePerUnit, diffPerUnit, icon }) {
+export default function AssetCard({ companyName, amount, pricePerUnit, diffPerUnit, icon, navigation }) {
     return (
         <Pressable
             style={({ pressed }) => [
                 styles.container,
                 pressed ? { backgroundColor: colors.grayLight } : null
             ]}
-            onPress={() => navigation.navigate(pageName)}
+            onPress={() => navigation.navigate('Portfolio')}
         >
             <View style={styles.imageContainer}>
                 <Image

@@ -7,7 +7,7 @@ import arrow from '../assets/icons/white/portfolio.png'
 import plus from '../assets/icons/black/Plus-circle.png'
 import send from '../assets/icons/black/Send.png'
 
-export default function PortfolioScreen() {
+export default function PortfolioScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}
             showsVerticalScrollIndicator={false}>
@@ -56,12 +56,12 @@ export default function PortfolioScreen() {
                 <Text style={[typography.subtitle, { marginBottom: 20 }]}>Мои активы</Text>
 
                 <View style={styles.assetsContainer}>
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
                 </View>
             </View>
         </ScrollView>

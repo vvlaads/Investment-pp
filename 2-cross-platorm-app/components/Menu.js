@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         alignItems: 'center',
         height: '100%',
-        width: 80,
+        width: 90,
     },
     buttonHover: {
         backgroundColor: colors.grayLight,

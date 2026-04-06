@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, Pressable, Image, useWindowDimensions } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable, Image, useWindowDimensions, ScrollView } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../theme/typography';
 import { colors } from '../theme/colors';
 import logo from '../assets/logo.png'
@@ -8,7 +8,8 @@ export default function RegisterScreen({ navigation }) {
     const logoWidth = width < 400 ? width * 0.8 : 400;
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}
+            showsVerticalScrollIndicator={false}>
             <View style={{ alignItems: 'center', marginBottom: 20 }}>
                 <Image
                     source={logo}
@@ -45,7 +46,7 @@ export default function RegisterScreen({ navigation }) {
                     Войти
                 </Text>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
@@ -53,8 +54,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        justifyContent: 'top',
-        backgroundColor: colors.background
+        backgroundColor: colors.background,
     },
 
     inputContainer: {
@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 20,
         justifyContent: 'center',
-        gap: 10
+        gap: 10,
+        marginBottom: 200,
     },
     button: {
         backgroundColor: colors.main,

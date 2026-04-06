@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../theme/typography';
 import { colors } from '../theme/colors';
 import { PieChart } from '../components/PieChart';
@@ -6,6 +6,9 @@ import Svg, { Circle } from 'react-native-svg';
 import { formatValue } from '../utils/formatValue';
 
 export default function AnalyticsScreen() {
+    const { width } = useWindowDimensions(); // ширина экрана
+    const blockSize = width * 0.9;
+
     const stocks = 500
     const bonds = 300
     const gold = 200
@@ -42,7 +45,7 @@ export default function AnalyticsScreen() {
             <View style={styles.body}>
                 <Text style={[typography.subtitle, { marginBottom: 20 }]}>Общее</Text>
 
-                <View style={styles.block}>
+                <View style={[styles.block, { maxHeight: blockSize }]}>
                     <PieChart
                         size={200}
                         strokeWidth={20}
@@ -97,7 +100,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         gap: 10,
         width: '100%',
-        height: '100%',
     },
     statisticsOption: {
         flexDirection: 'row',
