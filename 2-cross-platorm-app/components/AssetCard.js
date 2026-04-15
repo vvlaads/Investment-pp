@@ -9,7 +9,7 @@ export default function AssetCard({ companyName, amount, pricePerUnit, diffPerUn
                 styles.container,
                 pressed ? { backgroundColor: colors.grayLight } : null
             ]}
-            onPress={() => navigation.navigate('Portfolio')}
+            onPress={() => navigation.navigate('StockInfo')}
         >
             <View style={styles.imageContainer}>
                 <Image

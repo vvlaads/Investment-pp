@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import StockInfoScreen from './screens/StockInfoScreen';
 import Tabs from './navigation/Tabs';
 import { StatusBar } from 'react-native';
 import { colors } from './theme/colors';
@@ -37,6 +38,12 @@ export default function App() {
             options={{ headerShown: false }}
           />
 
+          {/* Без меню */}
+          <Stack.Screen
+            name="StockInfo"
+            component={StockInfoScreen}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>
