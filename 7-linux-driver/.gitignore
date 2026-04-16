@@ -1,0 +1,24 @@
+# Бинарные файлы модуля
+*.ko
+*.o
+*.mod
+*.mod.c
+*.mod.o
+*.mod.cmd
+
+# Метаданные сборки ядра
+modules.order
+Module.symvers
+
+# Скрытые файлы команд сборки (Kbuild)
+.*.cmd
+.tmp_versions/
+
+# Временные файлы редакторов
+*.swp
+*~
+.DS_Store
+
+# VS Code файлы (кроме конфигурации путей)
+.vscode/*.log
+.vscode/ipch/
