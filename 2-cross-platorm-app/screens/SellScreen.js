@@ -8,9 +8,32 @@ import { useState } from 'react';
 
 export default function SellScreen({ navigation }) {
     const stockName = "AAPL";
+    const availableAmount = 12;
     const [amount, setAmount] = useState('');
     const numericAmount = Number(amount) || 0;
+
+    let error = '';
+
+    if (amount === '') {
+        error = '';
+    } else if (!Number.isFinite(numericAmount)) {
+        error = 'Введите число';
+    } else if (numericAmount <= 0) {
+        error = 'Больше 0';
+    } else if (numericAmount > availableAmount) {
+        error = `Макс: ${availableAmount}`;
+    }
     const currentPricePerUnit = 600;
+    const isValidAmount = numericAmount > 0 && numericAmount <= availableAmount;
+    const isDisabled = !isValidAmount;
+
+    const handleChange = (text) => {
+        // удаляем всё кроме цифр
+        const cleaned = text.replace(/[^0-9]/g, '');
+        setAmount(cleaned);
+    };
+
+    const total = error ? 0 : numericAmount * currentPricePerUnit;
 
     return (
         <View style={{ flex: 1 }}>
@@ -30,9 +53,14 @@ export default function SellScreen({ navigation }) {
                         <TextInput
                             placeholder="Количество"
                             value={amount}
-                            onChangeText={setAmount}
+                            onChangeText={handleChange}
                             keyboardType="numeric"
-                            style={[styles.input, typography.subtitle]} />
+                            style={[styles.input, typography.subtitle, error ? styles.inputError : null]}
+                        />
+
+                        {!!error && (
+                            <Text style={styles.errorText}>{error}</Text>
+                        )}
                     </View>
 
 
@@ -52,7 +80,7 @@ export default function SellScreen({ navigation }) {
                         <View style={styles.row}>
                             <Text style={[styles.left, { flex: 2 }]}>Количество:</Text>
                             <Text style={[styles.right, { flex: 1 }]}>
-                                {numericAmount} шт.
+                                {error ? 0 : numericAmount} шт.
                             </Text>
                         </View>
                     </View>
@@ -64,7 +92,7 @@ export default function SellScreen({ navigation }) {
                                 Итого:
                             </Text>
                             <Text style={[typography.subtitle, { flex: 2, textAlign: 'right' }]}>
-                                {formatValue(numericAmount * currentPricePerUnit, true)}
+                                {formatValue(total, true)}
                             </Text>
                         </View>
                     </View>
@@ -73,14 +101,20 @@ export default function SellScreen({ navigation }) {
 
             <View style={styles.buttonContainer}>
                 <Pressable
+                    disabled={isDisabled}
                     style={({ pressed }) => [
                         styles.button,
-                        pressed ? styles.buttonHover : null,
-
+                        !isDisabled && pressed && styles.buttonHover,
+                        isDisabled && styles.buttonDisabled,
                     ]}
                     onPress={() => navigation.goBack()}
                 >
-                    <Text style={styles.buttonText}>Продать</Text>
+                    <Text style={[
+                        styles.buttonText,
+                        isDisabled && styles.buttonTextDisabled
+                    ]}>
+                        Продать
+                    </Text>
                 </Pressable>
             </View>
         </View>
@@ -133,6 +167,12 @@ const styles = StyleSheet.create({
     buttonHover: {
         backgroundColor: colors.mainDark,
     },
+    buttonDisabled: {
+        backgroundColor: colors.grayLight,
+    },
+    buttonTextDisabled: {
+        color: colors.gray,
+    },
     buttonText: {
         color: colors.white,
         fontWeight: fontWeights.bold,
@@ -169,6 +209,15 @@ const styles = StyleSheet.create({
         placeholderTextColor: colors.gray,
         borderRadius: 8,
         padding: 10,
+    },
+    inputError: {
+        borderColor: 'red',
+    },
+
+    errorText: {
+        color: 'red',
+        fontSize: fontSizes.medium,
         marginBottom: 10,
+        marginLeft: 10,
     },
 });
