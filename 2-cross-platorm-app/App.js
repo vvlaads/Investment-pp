@@ -8,6 +8,7 @@ import Tabs from './navigation/Tabs';
 import { StatusBar } from 'react-native';
 import { colors } from './theme/colors';
 import SellScreen from './screens/SellScreen';
+import BuyScreen from './screens/BuyScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +51,13 @@ export default function App() {
           <Stack.Screen
             name="Sell"
             component={SellScreen}
+            options={{ headerShown: false }}
+          />
+
+          {/* Без меню */}
+          <Stack.Screen
+            name="Buy"
+            component={BuyScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

@@ -1,15 +1,15 @@
 import TradeScreen from "./TradeScreen";
 
-export default function SellScreen({ navigation }) {
+export default function BuyScreen({ navigation }) {
     return (
         <TradeScreen
             navigation={navigation}
-            type="sell"
+            type="buy"
             stockName="AAPL"
             price={600}
-            availableAmount={12}
+            balance={100000}
             onSubmit={(amount) => {
-                console.log('SELL', amount);
+                console.log('BUY', amount);
                 navigation.goBack();
             }}
         />
