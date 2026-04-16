@@ -7,6 +7,7 @@ import StockInfoScreen from './screens/StockInfoScreen';
 import Tabs from './navigation/Tabs';
 import { StatusBar } from 'react-native';
 import { colors } from './theme/colors';
+import SellScreen from './screens/SellScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,13 @@ export default function App() {
           <Stack.Screen
             name="StockInfo"
             component={StockInfoScreen}
+            options={{ headerShown: false }}
+          />
+
+          {/* Без меню */}
+          <Stack.Screen
+            name="Sell"
+            component={SellScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

@@ -50,7 +50,7 @@ export default function StockInfoScreen({ navigation }) {
                                 pressed ? { backgroundColor: colors.mainDark } : null,
 
                             ]}
-                            onPress={() => alert('Click')}
+                            onPress={() => navigation.navigate("Sell")}
                         >
                             <Text style={[styles.buttonText, { color: colors.white }]}>Купить</Text>
                         </Pressable>
@@ -59,7 +59,7 @@ export default function StockInfoScreen({ navigation }) {
                                 styles.button,
                                 pressed ? styles.buttonHover : null
                             ]}
-                            onPress={() => alert('Click')}
+                            onPress={() => navigation.navigate("Sell")}
                         >
                             <Text style={styles.buttonText}>Продать</Text>
                         </Pressable>
