@@ -25,7 +25,7 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
         error = 'Недостаточно средств';
     }
 
-    const isDisabled = !!error;
+    const isDisabled = !!error || amount === '';
     const total = isDisabled ? 0 : numericAmount * price;
 
     const handleChange = (text) => {
