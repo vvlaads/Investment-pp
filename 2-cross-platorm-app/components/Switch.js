@@ -1,11 +1,11 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { palette } from "../theme/palette";
 import { fontSizes, fontWeights, typography } from "../theme/typography";
-import { useTheme } from "../theme/ThemeProvider";
+import { useApp } from "../utils/AppProvider";
 import { createCommonStyles } from "../theme/commonStyles";
 
 export default function Switch({ description, value, onChange }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
 

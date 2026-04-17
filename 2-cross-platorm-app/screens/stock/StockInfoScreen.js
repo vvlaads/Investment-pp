@@ -4,11 +4,11 @@ import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import { formatValue } from '../../utils/formatValue';
 import { formatProcent } from '../../utils/formatProcent';
 import BackButton from '../../components/BackButton';
-import { useTheme } from '../../theme/ThemeProvider';
+import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
 
 export default function StockInfoScreen({ navigation }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
 

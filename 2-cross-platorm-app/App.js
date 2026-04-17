@@ -11,14 +11,15 @@ import SellScreen from './screens/stock/SellScreen';
 import BuyScreen from './screens/stock/BuyScreen';
 import WithdrawScreen from './screens/balance/WithdrawScreen';
 import DepositScreen from './screens/balance/DepositScreen';
-import { ThemeProvider } from './theme/ThemeProvider';
 import SettingsScreen from './screens/settings/SettingsScreen';
+import NotificationSettingsScreen from './screens/settings/NotificationSettingsScreen';
+import { AppProvider } from './utils/AppProvider';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <ThemeProvider>
+    <AppProvider>
       <StatusBar backgroundColor={palette.main} />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
@@ -84,8 +85,14 @@ export default function App() {
             component={SettingsScreen}
             options={{ headerShown: false }}
           />
+          {/* Без меню */}
+          <Stack.Screen
+            name="NotificationSettings"
+            component={NotificationSettingsScreen}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
-    </ThemeProvider>
+    </AppProvider>
   );
 }

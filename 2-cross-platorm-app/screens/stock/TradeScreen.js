@@ -5,11 +5,11 @@ import { formatValue } from '../../utils/formatValue';
 import BackButton from '../../components/BackButton';
 import { TextInput } from 'react-native';
 import { useState } from 'react';
-import { useTheme } from '../../theme/ThemeProvider';
+import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
 
 export default function TradeScreen({ navigation, type, stockName, price, availableAmount, balance, onSubmit }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
 

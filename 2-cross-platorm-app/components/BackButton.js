@@ -1,10 +1,10 @@
 import { Image, Pressable, StyleSheet } from "react-native";
 import { palette } from "../theme/palette";
 import arrow from '../assets/icons/gray/Arrow-left.png'
-import { useTheme } from "../theme/ThemeProvider";
+import { useApp } from "../utils/AppProvider";
 
 export default function BackButton({ navigation }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const s = styles(theme);
 
     return (

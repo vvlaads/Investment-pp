@@ -8,11 +8,11 @@ import settings from '../../assets/icons/blue/Settings.png'
 import notification from '../../assets/icons/blue/Bell.png'
 import help from '../../assets/icons/blue/Help-circle.png'
 import logOut from '../../assets/icons/red/Log-out.png'
-import { useTheme } from '../../theme/ThemeProvider';
+import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
 
 export default function ProfileScreen({ navigation }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
 
@@ -52,7 +52,7 @@ export default function ProfileScreen({ navigation }) {
 
                 <View style={s.optionContainer}>
                     <LinkButton label={'Настройки'} description={'Персонализация приложения'} icon={settings} pageName={'Settings'} navigation={navigation} />
-                    <LinkButton label={'Уведомления'} description={'Управление уведомлениями'} icon={notification} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Уведомления'} description={'Управление уведомлениями'} icon={notification} pageName={'NotificationSettings'} navigation={navigation} />
                     <LinkButton label={'Помощь'} description={'Центр поддержки'} icon={help} pageName={'Portfolio'} navigation={navigation} />
                 </View>
 

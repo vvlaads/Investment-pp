@@ -1,10 +1,10 @@
 import { View, Text, TextInput, StyleSheet, Pressable, Image, useWindowDimensions, ScrollView } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import logo from '../../assets/logo.png'
-import { useTheme } from '../../theme/ThemeProvider';
+import { useApp } from '../../utils/AppProvider';
 
 export default function LoginScreen({ navigation }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const s = styles(theme);
 
     const { width } = useWindowDimensions();

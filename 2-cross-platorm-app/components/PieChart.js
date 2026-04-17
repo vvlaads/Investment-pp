@@ -4,10 +4,10 @@ import Svg, { Circle } from "react-native-svg";
 import { typography } from "../theme/typography";
 import { palette } from "../theme/palette";
 import { formatValue } from "../utils/formatValue";
-import { useTheme } from "../theme/ThemeProvider";
+import { useApp } from "../utils/AppProvider";
 
 export function PieChart({ size, strokeWidth, data, totalValue }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const s = styles(theme);
 
     const center = size / 2

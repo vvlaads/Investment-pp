@@ -2,10 +2,10 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { palette } from "../theme/palette";
 import { fontSizes, fontWeights, typography } from "../theme/typography";
 import arrow from '../assets/icons/gray/Chevron right.png'
-import { useTheme } from "../theme/ThemeProvider";
+import { useApp } from "../utils/AppProvider";
 
 export default function LinkButton({ label, description, icon, pageName, navigation }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const s = styles(theme);
 
     return (

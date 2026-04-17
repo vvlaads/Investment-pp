@@ -4,11 +4,11 @@ import { palette } from '../../theme/palette';
 import { PieChart } from '../../components/PieChart';
 import Svg, { Circle } from 'react-native-svg';
 import { formatValue } from '../../utils/formatValue';
-import { useTheme } from '../../theme/ThemeProvider';
+import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
 
 export default function AnalyticsScreen() {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
 

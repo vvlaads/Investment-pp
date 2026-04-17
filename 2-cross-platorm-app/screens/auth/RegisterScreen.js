@@ -2,10 +2,10 @@ import { View, Text, TextInput, StyleSheet, Pressable, Image, useWindowDimension
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import { palette } from '../../theme/palette';
 import logo from '../../assets/logo.png'
-import { useTheme } from '../../theme/ThemeProvider';
+import { useApp } from '../../utils/AppProvider';
 
 export default function RegisterScreen({ navigation }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const s = styles(theme);
 
     const { width } = useWindowDimensions(); // ширина экрана

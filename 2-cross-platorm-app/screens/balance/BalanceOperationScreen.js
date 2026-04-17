@@ -7,11 +7,11 @@ import { Pressable } from "react-native";
 import { useState } from "react";
 import { formatValue } from "../../utils/formatValue";
 import { TextInput } from "react-native";
-import { useTheme } from "../../theme/ThemeProvider";
 import { createCommonStyles } from "../../theme/commonStyles";
+import { useApp } from "../../utils/AppProvider";
 
 export default function BalanceOperationScreen({ navigation, type, balance = 0, onSubmit }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
 

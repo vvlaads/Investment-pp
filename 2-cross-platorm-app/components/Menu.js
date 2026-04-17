@@ -1,7 +1,7 @@
 import { Pressable, View, StyleSheet, Text, Image } from "react-native";
 import { palette } from "../theme/darkTheme";
 import { fontSizes, fontWeights } from "../theme/typography";
-import { useTheme } from "../theme/ThemeProvider";
+import { useApp } from "../utils/AppProvider";
 
 const menuConfig = {
     Portfolio: {
@@ -31,7 +31,7 @@ const menuConfig = {
 }
 
 export default function Menu({ state, navigation, descriptors }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const s = styles(theme);
 
     return (

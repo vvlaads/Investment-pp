@@ -4,7 +4,7 @@ import { palette } from '../../theme/palette';
 import { formatValue } from '../../utils/formatValue';
 import AssetCard from '../../components/AssetCard';
 import arrow from '../../assets/icons/white/portfolio.png'
-import { useTheme } from '../../theme/ThemeProvider';
+import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
 
 const icons = {
@@ -19,7 +19,7 @@ const icons = {
 };
 
 export default function PortfolioScreen({ navigation }) {
-    const { isDark, theme } = useTheme();
+    const { isDark, theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
 

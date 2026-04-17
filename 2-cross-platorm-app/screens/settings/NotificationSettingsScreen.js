@@ -4,14 +4,18 @@ import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import { formatValue } from '../../utils/formatValue';
 import { formatProcent } from '../../utils/formatProcent';
 import BackButton from '../../components/BackButton';
-import { useApp } from '../../utils/AppProvider';
+
 import { createCommonStyles } from '../../theme/commonStyles';
 import Switch from '../../components/Switch';
+import { useState } from 'react';
+import { useApp } from '../../utils/AppProvider';
 
-export default function SettingsScreen({ navigation }) {
-    const { theme, isDark, toggleTheme } = useApp();
+export default function NotificationSettingsScreen({ navigation }) {
+    const { theme, notifications, setNotifications } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
+
+    const [isShowing, setIsShowing] = useState(true);
 
     return (
         <View style={{ flex: 1 }}>
@@ -26,11 +30,11 @@ export default function SettingsScreen({ navigation }) {
                     </Text>
                 </View>
                 <View style={common.body}>
-                    <Text style={common.sectionName}>Интерфейс</Text>
+                    <Text style={common.sectionName}>Уведомления</Text>
                     <Switch
-                        description={'Темная тема'}
-                        value={isDark}
-                        onChange={toggleTheme} />
+                        description={'Показывать уведомления'}
+                        value={notifications}
+                        onChange={setNotifications} />
                 </View>
             </ScrollView>
         </View>

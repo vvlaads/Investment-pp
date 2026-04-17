@@ -3,10 +3,10 @@ import { typography } from '../../theme/typography';
 import { palette } from '../../theme/palette';
 import AssetCard from '../../components/AssetCard';
 import arrow from '../../assets/icons/white/portfolio.png'
-import { useTheme } from '../../theme/ThemeProvider';
+import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
 export default function MarketScreen({ navigation }) {
-    const { theme } = useTheme();
+    const { theme } = useApp();
     const common = createCommonStyles(theme);
 
     return (
