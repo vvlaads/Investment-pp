@@ -28,22 +28,22 @@ export default function StockInfoScreen({ navigation }) {
                 showsVerticalScrollIndicator={false}>
                 <View style={common.header}>
 
-                    <Text style={[typography.title, { color: theme.headerText, marginTop: 90, marginBottom: 20 }]}>
+                    <Text style={[typography.title, s.title]}>
                         {companyName}
                     </Text>
 
                     <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
-                        <Text style={typography.subtitle}>{formatValue(amount * currentPricePerUnit, true)}</Text>
+                        <Text style={[typography.subtitle, { color: theme.primaryText }]}>{formatValue(amount * currentPricePerUnit, true)}</Text>
                         <Text style={[typography.body, { color: diff > 0 ? theme.profit : theme.loss, fontWeight: fontWeights.bold }]}>{formatValue(diff, true)} ({formatProcent(procents, true)})</Text>
                         <Text style={{ fontSize: fontSizes.default, color: theme.secondaryText, fontWeight: fontWeights.bold }}>{amount} шт.</Text>
                     </View>
                 </View>
                 <View style={common.body}>
                     {/* TODO: График акции */}
-                    <Text style={[typography.subtitle, { marginBottom: 20 }]}>График</Text>
+                    <Text style={common.sectionName}>График</Text>
                     <View style={[common.block, { marginBottom: 50 }]}></View>
 
-                    <Text style={[typography.subtitle, { marginBottom: 20 }]}>О компании</Text>
+                    <Text style={common.sectionName}>О компании</Text>
                     <View style={common.block}>
                         <Text style={[typography.body, { color: theme.secondaryText }]}>{companyDescr}</Text>
                     </View>
@@ -77,6 +77,11 @@ export default function StockInfoScreen({ navigation }) {
 }
 
 const styles = (theme) => StyleSheet.create({
+    title: {
+        color: theme.headerText,
+        marginTop: 90,
+        marginBottom: 20,
+    },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',

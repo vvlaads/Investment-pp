@@ -20,7 +20,7 @@ export default function MarketScreen({ navigation }) {
 
 
             <View style={common.body}>
-                <Text style={[typography.subtitle, { marginBottom: 20 }]}>Выгодные предложения</Text>
+                <Text style={common.sectionName}>Выгодные предложения</Text>
 
                 <View style={styles.assetsContainer}>
                     <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />

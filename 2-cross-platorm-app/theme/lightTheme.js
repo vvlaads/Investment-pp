@@ -4,14 +4,16 @@ import { palette } from "./palette";
 export const lightTheme = {
     primary: palette.primary,
     primaryDark: palette.primaryDark,
+
     background: palette.gray100,
+    surface: palette.white,
+    alternativeSurface: palette.gray500,
 
     primaryText: palette.black,
     secondaryText: palette.gray500,
     headerText: palette.white,
     alternativeText: palette.white,
 
-    surface: palette.white,
     hover: palette.gray200,
     border: palette.gray300,
 

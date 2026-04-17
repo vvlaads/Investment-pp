@@ -7,14 +7,15 @@ export const darkTheme = {
 
     background: palette.gray900,
     surface: palette.gray800,
+    alternativeSurface: palette.gray500,
 
     primaryText: palette.gray50,
     secondaryText: palette.gray400,
     headerText: palette.white,
     alternativeText: palette.white,
 
-    border: palette.gray700,
     hover: palette.gray600,
+    border: palette.gray700,
 
     success: palette.green,
     error: palette.red,

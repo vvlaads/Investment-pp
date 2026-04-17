@@ -22,7 +22,7 @@ export default function RegisterScreen({ navigation }) {
                 />
             </View>
 
-            <Text style={[typography.title, { color: palette.black }, { marginBottom: 15 }]}>
+            <Text style={[typography.title, s.title]}>
                 Регистрация аккаунта
             </Text>
 
@@ -45,7 +45,9 @@ export default function RegisterScreen({ navigation }) {
                 <Text style={s.buttonText}>Зарегистрироваться</Text>
             </Pressable>
             <View style={s.loginContainer}>
-                <Text style={[{ color: palette.gray }, typography.body]}>Уже есть аккаунт? </Text>
+                <Text style={[typography.body, { color: theme.secondaryText }]}>
+                    Уже есть аккаунт?
+                </Text>
                 <Text style={[typography.body, s.link]} onPress={() => navigation.navigate('Login')}>
                     Войти
                 </Text>
@@ -59,6 +61,11 @@ const styles = (theme) => StyleSheet.create({
         flex: 1,
         padding: 20,
         backgroundColor: theme.background,
+    },
+
+    title: {
+        color: theme.primaryText,
+        marginBottom: 15,
     },
 
     inputContainer: {

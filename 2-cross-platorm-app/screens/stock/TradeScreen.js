@@ -70,20 +70,20 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
 
                     <View style={common.block}>
                         <View style={s.row}>
-                            <Text style={[s.left, { flex: 2 }]}>Название акции:</Text>
-                            <Text style={[s.right, { flex: 1 }]}>{stockName}</Text>
+                            <Text style={s.left}>Название акции:</Text>
+                            <Text style={s.right}>{stockName}</Text>
                         </View>
 
                         <View style={s.row}>
-                            <Text style={[s.left, { flex: 2 }]}>Стоимость акции:</Text>
-                            <Text style={[s.right, { flex: 1 }]}>
+                            <Text style={s.left}>Стоимость акции:</Text>
+                            <Text style={s.right}>
                                 {formatValue(price, true)}
                             </Text>
                         </View>
 
                         <View style={s.row}>
-                            <Text style={[s.left, { flex: 2 }]}>Количество:</Text>
-                            <Text style={[s.right, { flex: 1 }]}>
+                            <Text style={s.left}>Количество:</Text>
+                            <Text style={s.right}>
                                 {error ? 0 : numericAmount} шт.
                             </Text>
                         </View>
@@ -92,10 +92,10 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
 
                     <View style={common.block}>
                         <View style={s.row}>
-                            <Text style={[typography.subtitle, { flex: 1, fontWeight: fontWeights.default }]}>
+                            <Text style={[typography.subtitle, { flex: 1, fontWeight: fontWeights.default, color: theme.primaryText }]}>
                                 Итого:
                             </Text>
-                            <Text style={[typography.subtitle, { flex: 2, textAlign: 'right' }]}>
+                            <Text style={[typography.subtitle, { flex: 2, textAlign: 'right', color: theme.primaryText }]}>
                                 {formatValue(total, true)}
                             </Text>
                         </View>
@@ -165,11 +165,14 @@ const styles = (theme) => StyleSheet.create({
     },
 
     left: {
-        fontSize: fontSizes.medium,
+        flex: 2,
         color: theme.primaryText,
+        fontSize: fontSizes.medium,
     },
 
     right: {
+        flex: 1,
+        color: theme.primaryText,
         fontSize: fontSizes.medium,
         fontWeight: fontWeights.bold,
         textAlign: 'right',

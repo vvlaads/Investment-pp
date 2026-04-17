@@ -12,6 +12,7 @@ import BuyScreen from './screens/stock/BuyScreen';
 import WithdrawScreen from './screens/balance/WithdrawScreen';
 import DepositScreen from './screens/balance/DepositScreen';
 import { ThemeProvider } from './theme/ThemeProvider';
+import SettingsScreen from './screens/settings/SettingsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -75,6 +76,12 @@ export default function App() {
           <Stack.Screen
             name="Withdraw"
             component={WithdrawScreen}
+            options={{ headerShown: false }}
+          />
+          {/* Без меню */}
+          <Stack.Screen
+            name="Settings"
+            component={SettingsScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

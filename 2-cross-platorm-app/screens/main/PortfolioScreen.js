@@ -4,13 +4,22 @@ import { palette } from '../../theme/palette';
 import { formatValue } from '../../utils/formatValue';
 import AssetCard from '../../components/AssetCard';
 import arrow from '../../assets/icons/white/portfolio.png'
-import plus from '../../assets/icons/black/Plus-circle.png'
-import send from '../../assets/icons/black/Send.png'
 import { useTheme } from '../../theme/ThemeProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
 
+const icons = {
+    plus: {
+        light: require('../../assets/icons/black/Plus-circle.png'),
+        dark: require('../../assets/icons/white/Plus-circle.png')
+    },
+    send: {
+        light: require('../../assets/icons/black/Send.png'),
+        dark: require('../../assets/icons/white/Send.png')
+    },
+};
+
 export default function PortfolioScreen({ navigation }) {
-    const { theme } = useTheme();
+    const { isDark, theme } = useTheme();
     const common = createCommonStyles(theme);
     const s = styles(theme);
 
@@ -23,7 +32,7 @@ export default function PortfolioScreen({ navigation }) {
                 </Text>
 
                 <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
-                    <Text style={typography.subtitle}>{formatValue(1200000, true)}</Text>
+                    <Text style={[typography.subtitle, { color: theme.primaryText }]}>{formatValue(1200000, true)}</Text>
                     <Text style={[typography.body, { color: palette.green, fontWeight: fontWeights.bold }]}>+{formatValue(100000, true)} (+10%)</Text>
                 </View>
 
@@ -37,7 +46,7 @@ export default function PortfolioScreen({ navigation }) {
                     >
                         <Image
                             style={s.icon}
-                            source={plus}
+                            source={icons.plus[isDark ? 'dark' : 'light']}
                         />
                         <Text style={s.buttonText}>Пополнить</Text>
                     </Pressable>
@@ -50,7 +59,7 @@ export default function PortfolioScreen({ navigation }) {
                     >
                         <Image
                             style={s.icon}
-                            source={send}
+                            source={icons.send[isDark ? 'dark' : 'light']}
                         />
                         <Text style={s.buttonText}>Вывести</Text>
                     </Pressable>
@@ -59,7 +68,7 @@ export default function PortfolioScreen({ navigation }) {
 
             </View>
             <View style={common.body}>
-                <Text style={[typography.subtitle, { marginBottom: 20 }]}>Мои активы</Text>
+                <Text style={common.sectionName}>Мои активы</Text>
 
                 <View style={s.assetsContainer}>
                     <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
@@ -76,7 +85,7 @@ export default function PortfolioScreen({ navigation }) {
 
 const styles = (theme) => StyleSheet.create({
     button: {
-        backgroundColor: '#fff',
+        backgroundColor: theme.surface,
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 15,

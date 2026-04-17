@@ -66,7 +66,7 @@ export default function BalanceOperationScreen({ navigation, type, balance = 0, 
                 <View style={common.body}>
                     <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
                         <Text style={[typography.body, { color: theme.secondaryText }]}>Брокерский счет</Text>
-                        <Text style={typography.subtitle}>{formatValue(1200000, true)}</Text>
+                        <Text style={[typography.subtitle, { color: theme.primaryText }]}>{formatValue(1200000, true)}</Text>
                     </View>
 
                     <View style={s.inputContainer}>

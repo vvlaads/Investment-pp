@@ -41,17 +41,17 @@ export default function ProfileScreen({ navigation }) {
 
 
             <View style={common.body}>
-                <Text style={[typography.subtitle, s.sectionName]}>Операции</Text>
+                <Text style={common.sectionName}>Операции</Text>
 
                 <View style={s.optionContainer}>
                     <LinkButton label={'Пополнить'} description={'Пополнить счет'} icon={card} pageName={'Deposit'} navigation={navigation} />
                     <LinkButton label={'Вывести'} description={'Перевод на другой счет'} icon={send} pageName={'Withdraw'} navigation={navigation} />
                 </View>
 
-                <Text style={[typography.subtitle, s.sectionName]}>Настройки</Text>
+                <Text style={common.sectionName}>Настройки</Text>
 
                 <View style={s.optionContainer}>
-                    <LinkButton label={'Настройки'} description={'Персонализация приложения'} icon={settings} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Настройки'} description={'Персонализация приложения'} icon={settings} pageName={'Settings'} navigation={navigation} />
                     <LinkButton label={'Уведомления'} description={'Управление уведомлениями'} icon={notification} pageName={'Portfolio'} navigation={navigation} />
                     <LinkButton label={'Помощь'} description={'Центр поддержки'} icon={help} pageName={'Portfolio'} navigation={navigation} />
                 </View>
@@ -85,16 +85,13 @@ const styles = (theme) => StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    sectionName: {
-        marginBottom: 20,
-    },
     optionContainer: {
         flexDirection: 'column',
         gap: 20,
         marginBottom: 50,
     },
     button: {
-        backgroundColor: '#fff',
+        backgroundColor: theme.surface,
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 15,

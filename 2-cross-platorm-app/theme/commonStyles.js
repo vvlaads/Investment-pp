@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { fontSizes, fontWeights } from './typography';
 
 export const createCommonStyles = (theme) => StyleSheet.create({
     container: {
@@ -26,4 +27,10 @@ export const createCommonStyles = (theme) => StyleSheet.create({
         padding: 20,
         marginBottom: 20,
     },
+    sectionName: {
+        color: theme.primaryText,
+        fontSize: fontSizes.big,
+        fontWeight: fontWeights.bold,
+        marginBottom: 20,
+    }
 });

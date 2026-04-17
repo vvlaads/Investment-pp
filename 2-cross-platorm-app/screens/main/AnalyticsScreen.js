@@ -49,7 +49,7 @@ export default function AnalyticsScreen() {
 
 
             <View style={common.body}>
-                <Text style={[typography.subtitle, { marginBottom: 20 }]}>Общее</Text>
+                <Text style={common.sectionName}>Общее</Text>
 
                 <View style={[common.block, { maxHeight: blockSize }]}>
                     <PieChart
@@ -67,7 +67,7 @@ export default function AnalyticsScreen() {
                                 <Svg viewBox='0 0 10 10' style={s.statisticsOptionColor}>
                                     <Circle cx={5} cy={5} r={5} fill={item.color} />
                                 </Svg>
-                                <Text style={[typography.body, { flex: 1 }]}>{item.name}</Text>
+                                <Text style={[typography.body, { flex: 1, color: theme.primaryText }]}>{item.name}</Text>
                                 <Text style={s.statisticsOptionValue}>{formatValue(item.value, true)}</Text>
                             </View>
                         ))}
