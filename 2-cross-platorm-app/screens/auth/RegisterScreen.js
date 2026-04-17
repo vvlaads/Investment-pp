@@ -1,14 +1,18 @@
 import { View, Text, TextInput, StyleSheet, Pressable, Image, useWindowDimensions, ScrollView } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
-import { colors } from '../../theme/colors';
+import { palette } from '../../theme/palette';
 import logo from '../../assets/logo.png'
+import { useTheme } from '../../theme/ThemeProvider';
 
 export default function RegisterScreen({ navigation }) {
+    const { theme } = useTheme();
+    const s = styles(theme);
+
     const { width } = useWindowDimensions(); // ширина экрана
     const logoWidth = width < 400 ? width * 0.8 : 400;
 
     return (
-        <ScrollView style={styles.container}
+        <ScrollView style={s.container}
             showsVerticalScrollIndicator={false}>
             <View style={{ alignItems: 'center', marginBottom: 20 }}>
                 <Image
@@ -18,31 +22,31 @@ export default function RegisterScreen({ navigation }) {
                 />
             </View>
 
-            <Text style={[typography.title, { color: colors.black }, { marginBottom: 15 }]}>
+            <Text style={[typography.title, { color: palette.black }, { marginBottom: 15 }]}>
                 Регистрация аккаунта
             </Text>
 
-            <View style={styles.inputContainer}>
-                <TextInput placeholder="Фамилия" style={[styles.input, typography.body]} />
-                <TextInput placeholder="Имя" style={[styles.input, typography.body]} />
-                <TextInput placeholder="Отчество" style={[styles.input, typography.body]} />
-                <TextInput placeholder="Email" style={[styles.input, typography.body]} />
-                <TextInput placeholder="Password" secureTextEntry style={[styles.input, typography.body]} />
-                <TextInput placeholder="Password" secureTextEntry style={[styles.input, typography.body]} />
+            <View style={s.inputContainer}>
+                <TextInput placeholder="Фамилия" style={[s.input, typography.body]} />
+                <TextInput placeholder="Имя" style={[s.input, typography.body]} />
+                <TextInput placeholder="Отчество" style={[s.input, typography.body]} />
+                <TextInput placeholder="Email" style={[s.input, typography.body]} />
+                <TextInput placeholder="Password" secureTextEntry style={[s.input, typography.body]} />
+                <TextInput placeholder="Password" secureTextEntry style={[s.input, typography.body]} />
             </View>
 
             <Pressable
                 style={({ pressed }) => [
-                    styles.button,
-                    pressed ? styles.buttonHover : null
+                    s.button,
+                    pressed ? s.buttonHover : null
                 ]}
                 onPress={() => navigation.replace('Main')}
             >
-                <Text style={styles.buttonText}>Зарегистрироваться</Text>
+                <Text style={s.buttonText}>Зарегистрироваться</Text>
             </Pressable>
-            <View style={styles.loginContainer}>
-                <Text style={[{ color: colors.gray }, typography.body]}>Уже есть аккаунт? </Text>
-                <Text style={[typography.body, styles.link]} onPress={() => navigation.navigate('Login')}>
+            <View style={s.loginContainer}>
+                <Text style={[{ color: palette.gray }, typography.body]}>Уже есть аккаунт? </Text>
+                <Text style={[typography.body, s.link]} onPress={() => navigation.navigate('Login')}>
                     Войти
                 </Text>
             </View>
@@ -50,11 +54,11 @@ export default function RegisterScreen({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: colors.background,
+        backgroundColor: theme.background,
     },
 
     inputContainer: {
@@ -65,10 +69,10 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 1,
-        borderColor: colors.grayLight,
-        backgroundColor: colors.white,
-        color: colors.black,
-        placeholderTextColor: colors.gray,
+        borderColor: theme.border,
+        backgroundColor: theme.surface,
+        color: theme.primaryText,
+        placeholderTextColor: theme.secondaryText,
         borderRadius: 8,
         padding: 10,
         marginBottom: 10,
@@ -81,22 +85,22 @@ const styles = StyleSheet.create({
         marginBottom: 200,
     },
     button: {
-        backgroundColor: colors.main,
+        backgroundColor: theme.primary,
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 15,
         alignItems: 'center',
     },
     buttonHover: {
-        backgroundColor: colors.mainDark,
+        backgroundColor: theme.primaryDark,
     },
     buttonText: {
-        color: colors.white,
+        color: '#fff',
         fontWeight: fontWeights.bold,
         fontSize: fontSizes.medium,
     },
     link: {
-        color: colors.main,
+        color: theme.primary,
         fontWeight: fontWeights.bold,
     },
 });

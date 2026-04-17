@@ -2,10 +2,14 @@ import { StyleSheet, Text } from "react-native";
 import { View } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 import { typography } from "../theme/typography";
-import { colors } from "../theme/colors";
+import { palette } from "../theme/palette";
 import { formatValue } from "../utils/formatValue";
+import { useTheme } from "../theme/ThemeProvider";
 
 export function PieChart({ size, strokeWidth, data, totalValue }) {
+    const { theme } = useTheme();
+    const s = styles(theme);
+
     const center = size / 2
     const radius = (size - strokeWidth) / 2
     const cicrumference = 2 * Math.PI * radius
@@ -18,7 +22,7 @@ export function PieChart({ size, strokeWidth, data, totalValue }) {
     });
 
     return (
-        <View style={styles.container}>
+        <View style={s.container}>
             <Svg viewBox={`0 0 ${size} ${size}`} >
                 {data.map((item, index) => (
                     <Circle
@@ -37,14 +41,14 @@ export function PieChart({ size, strokeWidth, data, totalValue }) {
                     />
                 ))}
             </Svg>
-            <Text style={[styles.centerText, typography.subtitle]}>
+            <Text style={[s.centerText, typography.subtitle]}>
                 {formatValue(totalValue, true)}
             </Text>
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
@@ -55,6 +59,6 @@ const styles = StyleSheet.create({
     centerText: {
         position: 'absolute',
         textAlign: 'center',
-        color: colors.black,
+        color: theme.primaryText,
     },
 })

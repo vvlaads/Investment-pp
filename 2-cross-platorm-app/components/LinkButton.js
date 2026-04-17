@@ -1,45 +1,49 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { colors } from "../theme/colors";
+import { palette } from "../theme/palette";
 import { fontSizes, fontWeights, typography } from "../theme/typography";
 import arrow from '../assets/icons/gray/Chevron right.png'
+import { useTheme } from "../theme/ThemeProvider";
 
 export default function LinkButton({ label, description, icon, pageName, navigation }) {
+    const { theme } = useTheme();
+    const s = styles(theme);
+
     return (
         <Pressable
             style={({ pressed }) => [
-                styles.container,
-                pressed ? { backgroundColor: colors.grayLight } : null
+                s.container,
+                pressed ? { backgroundColor: theme.hover } : null
             ]}
             onPress={() => navigation.navigate(pageName)}
         >
-            <View style={styles.imageContainer}>
+            <View style={s.imageContainer}>
                 <Image
                     source={icon}
-                    style={styles.image}
+                    style={s.image}
                 />
             </View>
 
-            <View style={styles.textContainer}>
-                <Text style={[styles.label, typography.body]}>{label}</Text>
-                <Text style={styles.description}>{description}</Text>
+            <View style={s.textContainer}>
+                <Text style={[s.label, typography.body]}>{label}</Text>
+                <Text style={s.description}>{description}</Text>
             </View>
 
-            <View style={styles.arrowContainer}>
+            <View style={s.arrowContainer}>
                 <Image
                     source={arrow}
-                    style={styles.arrow} />
+                    style={s.arrow} />
             </View>
 
         </Pressable>
     );
 }
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
-        backgroundColor: colors.white,
+        backgroundColor: theme.surface,
         flexDirection: "row",
         padding: 10,
-        borderColor: colors.grayLight,
+        borderColor: theme.border,
         borderWidth: 1,
         borderRadius: 10,
         gap: 10,
@@ -48,7 +52,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: 42,
         height: 42,
-        backgroundColor: colors.background,
+        backgroundColor: theme.background,
         borderRadius: 10,
         padding: 5,
     },
@@ -61,10 +65,10 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     label: {
-        color: colors.black
+        color: theme.primaryText
     },
     description: {
-        color: colors.gray,
+        color: theme.secondaryText,
         fontSize: fontSizes.small,
         fontWeight: fontWeights.default,
     },

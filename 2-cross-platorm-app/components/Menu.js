@@ -1,6 +1,7 @@
 import { Pressable, View, StyleSheet, Text, Image } from "react-native";
-import { colors } from "../theme/colors";
+import { palette } from "../theme/darkTheme";
 import { fontSizes, fontWeights } from "../theme/typography";
+import { useTheme } from "../theme/ThemeProvider";
 
 const menuConfig = {
     Portfolio: {
@@ -30,8 +31,11 @@ const menuConfig = {
 }
 
 export default function Menu({ state, navigation, descriptors }) {
+    const { theme } = useTheme();
+    const s = styles(theme);
+
     return (
-        <View style={styles.container}>
+        <View style={s.container}>
             {state.routes.map((route, index) => {
                 const isActive = state.index === index;
 
@@ -43,18 +47,18 @@ export default function Menu({ state, navigation, descriptors }) {
                 return (
                     <Pressable
                         style={({ pressed }) => [
-                            styles.button,
-                            pressed ? styles.buttonHover : null,
-                            isActive ? styles.buttonActive : null
+                            s.button,
+                            pressed ? s.buttonHover : null,
+                            isActive ? s.buttonActive : null
                         ]}
                         key={route.key}
                         onPress={() => navigation.navigate(route.name)}
                     >
                         <Image
                             source={isActive ? icons.active : icons.inactive}
-                            style={styles.buttonImage}
+                            style={s.buttonImage}
                         />
-                        <Text style={[styles.buttonText, isActive ? styles.buttonTextActive : null]}>
+                        <Text style={[s.buttonText, isActive ? s.buttonTextActive : null]}>
                             {label}
                         </Text>
                     </Pressable>
@@ -64,7 +68,7 @@ export default function Menu({ state, navigation, descriptors }) {
     );
 }
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         position: 'absolute',
         bottom: 0,
@@ -74,13 +78,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         padding: 10,
         paddingTop: 5,
-        borderTopColor: colors.grayMedium,
+        borderTopColor: '#fff',
         borderTopWidth: 1,
-        backgroundColor: colors.white,
+        backgroundColor: theme.surface,
         height: 80,
     },
     button: {
-        backgroundColor: colors.white,
+        backgroundColor: theme.surface,
         paddingVertical: 10,
         paddingHorizontal: 10,
         borderRadius: 15,
@@ -89,18 +93,18 @@ const styles = StyleSheet.create({
         width: 90,
     },
     buttonHover: {
-        backgroundColor: colors.grayLight,
+        backgroundColor: theme.hover,
     },
     buttonActive: {
-        backgroundColor: colors.main,
+        backgroundColor: theme.primary,
     },
     buttonText: {
-        color: colors.gray,
+        color: theme.secondaryText,
         fontSize: fontSizes.small,
         fontWeight: fontWeights.default,
     },
     buttonTextActive: {
-        color: colors.white,
+        color: '#fff',
     },
     buttonImage: {
         width: 24,

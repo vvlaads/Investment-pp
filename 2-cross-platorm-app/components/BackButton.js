@@ -1,26 +1,30 @@
 import { Image, Pressable, StyleSheet } from "react-native";
-import { colors } from "../theme/colors";
+import { palette } from "../theme/palette";
 import arrow from '../assets/icons/gray/Arrow-left.png'
+import { useTheme } from "../theme/ThemeProvider";
 
 export default function BackButton({ navigation }) {
+    const { theme } = useTheme();
+    const s = styles(theme);
+
     return (
         <Pressable
             style={({ pressed }) => [
-                styles.container,
-                pressed ? { backgroundColor: colors.grayLight } : null
+                s.container,
+                pressed ? { backgroundColor: theme.hover } : null
             ]}
             onPress={() => navigation.goBack()}
         >
             <Image
                 source={arrow}
-                style={styles.image}
+                style={s.image}
             />
 
         </Pressable>
     );
 }
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         position: 'absolute',
         top: 20,
@@ -29,10 +33,10 @@ const styles = StyleSheet.create({
 
         width: 48,
         height: 48,
-        backgroundColor: colors.white,
+        backgroundColor: theme.surface,
         borderRadius: 15,
         borderWidth: 1,
-        borderColor: colors.grayMedium,
+        borderColor: theme.border,
         justifyContent: 'center',
         alignItems: 'center'
     },

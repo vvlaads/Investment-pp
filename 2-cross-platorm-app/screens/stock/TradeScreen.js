@@ -1,12 +1,18 @@
 import { Text, StyleSheet, ScrollView, View, Pressable } from 'react-native';
-import { colors } from '../../theme/colors';
+import { palette } from '../../theme/palette';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import { formatValue } from '../../utils/formatValue';
 import BackButton from '../../components/BackButton';
 import { TextInput } from 'react-native';
 import { useState } from 'react';
+import { useTheme } from '../../theme/ThemeProvider';
+import { createCommonStyles } from '../../theme/commonStyles';
 
 export default function TradeScreen({ navigation, type, stockName, price, availableAmount, balance, onSubmit }) {
+    const { theme } = useTheme();
+    const common = createCommonStyles(theme);
+    const s = styles(theme);
+
     const [amount, setAmount] = useState('');
     const numericAmount = Number(amount);
 
@@ -37,55 +43,55 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
         <View style={{ flex: 1 }}>
             <BackButton navigation={navigation} />
 
-            <ScrollView style={styles.container}
+            <ScrollView style={common.container}
                 showsVerticalScrollIndicator={false}>
-                <View style={styles.header}>
-                    <Text style={[typography.title, { color: colors.white, marginTop: 90, marginBottom: 20 }]}>
+                <View style={common.header}>
+                    <Text style={[typography.title, { color: theme.headerText, marginTop: 90, marginBottom: 20 }]}>
                         {isSell ? 'Продать' : 'Купить'} акцию
                     </Text>
                 </View>
 
 
-                <View style={styles.body}>
-                    <View style={styles.inputContainer}>
+                <View style={common.body}>
+                    <View style={s.inputContainer}>
                         <TextInput
                             placeholder="Количество"
                             value={amount}
                             onChangeText={handleChange}
                             keyboardType="numeric"
-                            style={[styles.input, typography.subtitle, error ? styles.inputError : null]}
+                            style={[s.input, typography.subtitle, error ? s.inputError : null]}
                         />
 
                         {!!error && (
-                            <Text style={styles.errorText}>{error}</Text>
+                            <Text style={s.errorText}>{error}</Text>
                         )}
                     </View>
 
 
-                    <View style={styles.block}>
-                        <View style={styles.row}>
-                            <Text style={[styles.left, { flex: 2 }]}>Название акции:</Text>
-                            <Text style={[styles.right, { flex: 1 }]}>{stockName}</Text>
+                    <View style={common.block}>
+                        <View style={s.row}>
+                            <Text style={[s.left, { flex: 2 }]}>Название акции:</Text>
+                            <Text style={[s.right, { flex: 1 }]}>{stockName}</Text>
                         </View>
 
-                        <View style={styles.row}>
-                            <Text style={[styles.left, { flex: 2 }]}>Стоимость акции:</Text>
-                            <Text style={[styles.right, { flex: 1 }]}>
+                        <View style={s.row}>
+                            <Text style={[s.left, { flex: 2 }]}>Стоимость акции:</Text>
+                            <Text style={[s.right, { flex: 1 }]}>
                                 {formatValue(price, true)}
                             </Text>
                         </View>
 
-                        <View style={styles.row}>
-                            <Text style={[styles.left, { flex: 2 }]}>Количество:</Text>
-                            <Text style={[styles.right, { flex: 1 }]}>
+                        <View style={s.row}>
+                            <Text style={[s.left, { flex: 2 }]}>Количество:</Text>
+                            <Text style={[s.right, { flex: 1 }]}>
                                 {error ? 0 : numericAmount} шт.
                             </Text>
                         </View>
                     </View>
 
 
-                    <View style={styles.block}>
-                        <View style={styles.row}>
+                    <View style={common.block}>
+                        <View style={s.row}>
                             <Text style={[typography.subtitle, { flex: 1, fontWeight: fontWeights.default }]}>
                                 Итого:
                             </Text>
@@ -97,19 +103,19 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
                 </View>
             </ScrollView>
 
-            <View style={styles.buttonContainer}>
+            <View style={s.buttonContainer}>
                 <Pressable
                     disabled={isDisabled}
                     style={({ pressed }) => [
-                        styles.button,
-                        !isDisabled && pressed && styles.buttonHover,
-                        isDisabled && styles.buttonDisabled,
+                        s.button,
+                        !isDisabled && pressed && s.buttonHover,
+                        isDisabled && s.buttonDisabled,
                     ]}
                     onPress={() => onSubmit(numericAmount)}
                 >
                     <Text style={[
-                        styles.buttonText,
-                        isDisabled && styles.buttonTextDisabled
+                        s.buttonText,
+                        isDisabled && s.buttonTextDisabled
                     ]}>
                         {isSell ? 'Продать' : 'Купить'}
                     </Text>
@@ -119,31 +125,7 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    header: {
-        backgroundColor: colors.main,
-        flex: 1,
-        padding: 20,
-        paddingBottom: 40,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-    },
-    body: {
-        padding: 20,
-        justifyContent: 'top',
-        backgroundColor: colors.background,
-        paddingBottom: 200,
-    },
-    block: {
-        backgroundColor: colors.white,
-        color: colors.black,
-        borderRadius: 20,
-        padding: 20,
-        marginBottom: 50,
-    },
+const styles = (theme) => StyleSheet.create({
     buttonContainer: {
         position: 'absolute',
         bottom: 20,
@@ -153,7 +135,7 @@ const styles = StyleSheet.create({
         padding: 20
     },
     button: {
-        backgroundColor: colors.main,
+        backgroundColor: theme.primary,
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 15,
@@ -163,16 +145,16 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     buttonHover: {
-        backgroundColor: colors.mainDark,
+        backgroundColor: theme.primaryDark,
     },
     buttonDisabled: {
-        backgroundColor: colors.grayLight,
+        backgroundColor: theme.hover,
     },
     buttonTextDisabled: {
-        color: colors.gray,
+        color: theme.secondaryText,
     },
     buttonText: {
-        color: colors.white,
+        color: theme.alternativeText,
         fontWeight: fontWeights.bold,
         fontSize: fontSizes.default,
     },
@@ -184,7 +166,7 @@ const styles = StyleSheet.create({
 
     left: {
         fontSize: fontSizes.medium,
-        color: colors.black,
+        color: theme.primaryText,
     },
 
     right: {
@@ -201,10 +183,10 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 1,
-        borderColor: colors.grayLight,
-        backgroundColor: colors.white,
-        color: colors.black,
-        placeholderTextColor: colors.gray,
+        borderColor: theme.border,
+        backgroundColor: theme.surface,
+        color: theme.primaryText,
+        placeholderTextColor: theme.secondaryText,
         borderRadius: 8,
         padding: 10,
     },

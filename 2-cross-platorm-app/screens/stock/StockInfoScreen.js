@@ -1,11 +1,17 @@
 import { Text, StyleSheet, ScrollView, View, Pressable } from 'react-native';
-import { colors } from '../../theme/colors';
+import { palette } from '../../theme/palette';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import { formatValue } from '../../utils/formatValue';
 import { formatProcent } from '../../utils/formatProcent';
 import BackButton from '../../components/BackButton';
+import { useTheme } from '../../theme/ThemeProvider';
+import { createCommonStyles } from '../../theme/commonStyles';
 
 export default function StockInfoScreen({ navigation }) {
+    const { theme } = useTheme();
+    const common = createCommonStyles(theme);
+    const s = styles(theme);
+
     const companyName = 'Apple';
     const companyDescr = 'Apple Inc. — ведущая технологическая компания, специализирующаяся на разработке инновационных продуктов и услуг для потребителей по всему миру.'
     const amount = 2;
@@ -18,50 +24,50 @@ export default function StockInfoScreen({ navigation }) {
         <View style={{ flex: 1 }}>
             <BackButton navigation={navigation} />
 
-            <ScrollView style={styles.container}
+            <ScrollView style={common.container}
                 showsVerticalScrollIndicator={false}>
-                <View style={styles.header}>
+                <View style={common.header}>
 
-                    <Text style={[typography.title, { color: colors.white, marginTop: 90, marginBottom: 20 }]}>
+                    <Text style={[typography.title, { color: theme.headerText, marginTop: 90, marginBottom: 20 }]}>
                         {companyName}
                     </Text>
 
-                    <View style={[styles.block, { flexDirection: 'column', gap: 10 }]}>
+                    <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
                         <Text style={typography.subtitle}>{formatValue(amount * currentPricePerUnit, true)}</Text>
-                        <Text style={[typography.body, { color: diff > 0 ? colors.green : colors.red, fontWeight: fontWeights.bold }]}>{formatValue(diff, true)} ({formatProcent(procents, true)})</Text>
-                        <Text style={{ fontSize: fontSizes.default, color: colors.gray, fontWeight: fontWeights.bold }}>{amount} шт.</Text>
+                        <Text style={[typography.body, { color: diff > 0 ? theme.profit : theme.loss, fontWeight: fontWeights.bold }]}>{formatValue(diff, true)} ({formatProcent(procents, true)})</Text>
+                        <Text style={{ fontSize: fontSizes.default, color: theme.secondaryText, fontWeight: fontWeights.bold }}>{amount} шт.</Text>
                     </View>
                 </View>
-                <View style={styles.body}>
+                <View style={common.body}>
                     {/* TODO: График акции */}
                     <Text style={[typography.subtitle, { marginBottom: 20 }]}>График</Text>
-                    <View style={[styles.block, { marginBottom: 50 }]}></View>
+                    <View style={[common.block, { marginBottom: 50 }]}></View>
 
                     <Text style={[typography.subtitle, { marginBottom: 20 }]}>О компании</Text>
-                    <View style={styles.block}>
-                        <Text style={[typography.body, { color: colors.gray }]}>{companyDescr}</Text>
+                    <View style={common.block}>
+                        <Text style={[typography.body, { color: theme.secondaryText }]}>{companyDescr}</Text>
                     </View>
 
-                    <View style={styles.buttonContainer}>
+                    <View style={s.buttonContainer}>
                         <Pressable
                             style={({ pressed }) => [
-                                styles.button,
-                                { backgroundColor: colors.main },
-                                pressed ? { backgroundColor: colors.mainDark } : null,
+                                s.button,
+                                { backgroundColor: theme.primary },
+                                pressed ? { backgroundColor: theme.primaryDark } : null,
 
                             ]}
                             onPress={() => navigation.navigate("Buy")}
                         >
-                            <Text style={[styles.buttonText, { color: colors.white }]}>Купить</Text>
+                            <Text style={[s.buttonText, { color: theme.headerText }]}>Купить</Text>
                         </Pressable>
                         <Pressable
                             style={({ pressed }) => [
-                                styles.button,
-                                pressed ? styles.buttonHover : null
+                                s.button,
+                                pressed ? s.buttonHover : null
                             ]}
                             onPress={() => navigation.navigate("Sell")}
                         >
-                            <Text style={styles.buttonText}>Продать</Text>
+                            <Text style={s.buttonText}>Продать</Text>
                         </Pressable>
                     </View>
                 </View>
@@ -70,30 +76,7 @@ export default function StockInfoScreen({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    header: {
-        backgroundColor: colors.main,
-        flex: 1,
-        padding: 20,
-        paddingBottom: 40,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-    },
-    body: {
-        padding: 20,
-        justifyContent: 'top',
-        backgroundColor: colors.background,
-        paddingBottom: 200,
-    },
-    block: {
-        backgroundColor: colors.white,
-        color: colors.black,
-        borderRadius: 20,
-        padding: 20,
-    },
+const styles = (theme) => StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -104,7 +87,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     button: {
-        backgroundColor: colors.white,
+        backgroundColor: theme.surface,
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 15,
@@ -114,10 +97,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     buttonHover: {
-        backgroundColor: colors.grayLight,
+        backgroundColor: theme.hover,
     },
     buttonText: {
-        color: colors.black,
+        color: theme.primaryText,
         fontWeight: fontWeights.bold,
         fontSize: fontSizes.default,
     },

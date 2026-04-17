@@ -1,11 +1,17 @@
 import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
-import { colors } from '../../theme/colors';
+import { palette } from '../../theme/palette';
 import { PieChart } from '../../components/PieChart';
 import Svg, { Circle } from 'react-native-svg';
 import { formatValue } from '../../utils/formatValue';
+import { useTheme } from '../../theme/ThemeProvider';
+import { createCommonStyles } from '../../theme/commonStyles';
 
 export default function AnalyticsScreen() {
+    const { theme } = useTheme();
+    const common = createCommonStyles(theme);
+    const s = styles(theme);
+
     const { width } = useWindowDimensions(); // ширина экрана
     const blockSize = width * 0.9;
 
@@ -17,35 +23,35 @@ export default function AnalyticsScreen() {
     const chartData = [
         {
             name: 'Акции',
-            color: colors.purple,
+            color: palette.purple,
             value: stocks,
         },
         {
             name: 'Облигации',
-            color: colors.pink,
+            color: palette.pink,
             value: bonds,
         },
         {
             name: 'Золото',
-            color: colors.orange,
+            color: palette.orange,
             value: gold,
         },
     ];
 
     return (
-        <ScrollView style={styles.container}
+        <ScrollView style={common.container}
             showsVerticalScrollIndicator={false}>
-            <View style={styles.header}>
-                <Text style={[typography.title, { color: colors.white, marginTop: 50, marginBottom: 20 }]}>
+            <View style={common.header}>
+                <Text style={[typography.title, { color: theme.headerText, marginTop: 50, marginBottom: 20 }]}>
                     Аналитика
                 </Text>
             </View>
 
 
-            <View style={styles.body}>
+            <View style={common.body}>
                 <Text style={[typography.subtitle, { marginBottom: 20 }]}>Общее</Text>
 
-                <View style={[styles.block, { maxHeight: blockSize }]}>
+                <View style={[common.block, { maxHeight: blockSize }]}>
                     <PieChart
                         size={200}
                         strokeWidth={20}
@@ -54,15 +60,15 @@ export default function AnalyticsScreen() {
                     />
                 </View>
 
-                <View style={styles.block}>
-                    <View style={styles.statisticsContainer}>
+                <View style={common.block}>
+                    <View style={s.statisticsContainer}>
                         {chartData.map((item, index) => (
-                            <View key={index} style={styles.statisticsOption}>
-                                <Svg viewBox='0 0 10 10' style={styles.statisticsOptionColor}>
+                            <View key={index} style={s.statisticsOption}>
+                                <Svg viewBox='0 0 10 10' style={s.statisticsOptionColor}>
                                     <Circle cx={5} cy={5} r={5} fill={item.color} />
                                 </Svg>
                                 <Text style={[typography.body, { flex: 1 }]}>{item.name}</Text>
-                                <Text style={styles.statisticsOptionValue}>{formatValue(item.value, true)}</Text>
+                                <Text style={s.statisticsOptionValue}>{formatValue(item.value, true)}</Text>
                             </View>
                         ))}
                     </View>
@@ -72,30 +78,7 @@ export default function AnalyticsScreen() {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    header: {
-        backgroundColor: colors.main,
-        height: 160,
-        padding: 20,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-    },
-    body: {
-        padding: 20,
-        justifyContent: 'top',
-        backgroundColor: colors.background,
-        paddingBottom: 200,
-    },
-    block: {
-        borderRadius: 15,
-        backgroundColor: colors.white,
-        padding: 20,
-        alignItems: 'center',
-        marginBottom: 20,
-    },
+const styles = (theme) => StyleSheet.create({
     statisticsContainer: {
         flexDirection: 'column',
         gap: 10,
@@ -112,7 +95,7 @@ const styles = StyleSheet.create({
         height: 16
     },
     statisticsOptionValue: {
-        color: colors.black,
+        color: theme.primaryText,
         fontSize: fontSizes.default,
         fontWeight: fontWeights.bold,
     },

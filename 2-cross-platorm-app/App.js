@@ -6,18 +6,19 @@ import RegisterScreen from './screens/auth/RegisterScreen';
 import StockInfoScreen from './screens/stock/StockInfoScreen';
 import Tabs from './navigation/Tabs';
 import { StatusBar } from 'react-native';
-import { colors } from './theme/colors';
+import { palette } from './theme/palette';
 import SellScreen from './screens/stock/SellScreen';
 import BuyScreen from './screens/stock/BuyScreen';
 import WithdrawScreen from './screens/balance/WithdrawScreen';
 import DepositScreen from './screens/balance/DepositScreen';
+import { ThemeProvider } from './theme/ThemeProvider';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <>
-      <StatusBar backgroundColor={colors.main} />
+    <ThemeProvider>
+      <StatusBar backgroundColor={palette.main} />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Login">
 
@@ -78,6 +79,6 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    </>
+    </ThemeProvider>
   );
 }

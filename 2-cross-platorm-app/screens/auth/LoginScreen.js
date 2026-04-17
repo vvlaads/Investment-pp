@@ -1,15 +1,20 @@
 import { View, Text, TextInput, StyleSheet, Pressable, Image, useWindowDimensions, ScrollView } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
-import { colors } from '../../theme/colors';
 import logo from '../../assets/logo.png'
+import { useTheme } from '../../theme/ThemeProvider';
 
 export default function LoginScreen({ navigation }) {
-    const { width } = useWindowDimensions(); // ширина экрана
+    const { theme } = useTheme();
+    const s = styles(theme);
+
+    const { width } = useWindowDimensions();
     const logoWidth = width < 400 ? width * 0.8 : 400;
 
     return (
-        <ScrollView style={styles.container}
-            showsVerticalScrollIndicator={false}>
+        <ScrollView
+            style={s.container}
+            showsVerticalScrollIndicator={false}
+        >
             <View style={{ alignItems: 'center', marginBottom: 20 }}>
                 <Image
                     source={logo}
@@ -18,30 +23,47 @@ export default function LoginScreen({ navigation }) {
                 />
             </View>
 
-            <Text style={[typography.title, { color: colors.black }, { marginBottom: 15 }]}>
+            <Text style={[typography.title, s.title]}>
                 Добро пожаловать
             </Text>
-            <Text style={[typography.body, { color: colors.gray, marginBottom: 20 }]}>
+
+            <Text style={[typography.body, s.subtitle]}>
                 Войдите, чтобы продолжить
             </Text>
 
-            <View style={styles.inputContainer}>
-                <TextInput placeholder="Email" style={[styles.input, typography.body]} />
-                <TextInput placeholder="Password" secureTextEntry style={[styles.input, typography.body]} />
+            <View style={s.inputContainer}>
+                <TextInput
+                    placeholder="Email"
+                    placeholderTextColor={theme.secondaryText}
+                    style={[s.input, typography.body]}
+                />
+                <TextInput
+                    placeholder="Password"
+                    placeholderTextColor={theme.secondaryText}
+                    secureTextEntry
+                    style={[s.input, typography.body]}
+                />
             </View>
 
             <Pressable
                 style={({ pressed }) => [
-                    styles.button,
-                    pressed ? styles.buttonHover : null
+                    s.button,
+                    pressed && s.buttonHover
                 ]}
                 onPress={() => navigation.replace('Main')}
             >
-                <Text style={styles.buttonText}>Войти</Text>
+                <Text style={s.buttonText}>Войти</Text>
             </Pressable>
-            <View style={styles.registerContainer}>
-                <Text style={[{ color: colors.gray }, typography.body]}>Нет аккаунта? </Text>
-                <Text style={[typography.body, styles.link]} onPress={() => navigation.navigate('Register')}>
+
+            <View style={s.registerContainer}>
+                <Text style={[typography.body, { color: theme.secondaryText }]}>
+                    Нет аккаунта?
+                </Text>
+
+                <Text
+                    style={[typography.body, s.link]}
+                    onPress={() => navigation.navigate('Register')}
+                >
                     Зарегистрироваться
                 </Text>
             </View>
@@ -49,29 +71,38 @@ export default function LoginScreen({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: colors.background
+        backgroundColor: theme.background,
+    },
+
+    title: {
+        color: theme.primaryText,
+        marginBottom: 15,
+    },
+
+    subtitle: {
+        color: theme.secondaryText,
+        marginBottom: 20,
     },
 
     inputContainer: {
         marginTop: 20,
         marginBottom: 20,
-        flexDirection: 'column',
         gap: 10,
     },
+
     input: {
         borderWidth: 1,
-        borderColor: colors.grayLight,
-        backgroundColor: colors.white,
-        color: colors.black,
-        placeholderTextColor: colors.gray,
+        borderColor: theme.border,
+        backgroundColor: theme.surface,
+        color: theme.primaryText,
         borderRadius: 8,
         padding: 10,
-        marginBottom: 10,
     },
+
     registerContainer: {
         flexDirection: 'row',
         marginTop: 20,
@@ -79,23 +110,27 @@ const styles = StyleSheet.create({
         gap: 10,
         marginBottom: 200,
     },
+
     button: {
-        backgroundColor: colors.main,
+        backgroundColor: theme.primary,
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 15,
         alignItems: 'center',
     },
+
     buttonHover: {
-        backgroundColor: colors.mainDark,
+        backgroundColor: theme.primaryDark,
     },
+
     buttonText: {
-        color: colors.white,
+        color: '#fff', // 👈 обычно фиксированный
         fontWeight: fontWeights.bold,
         fontSize: fontSizes.medium,
     },
+
     link: {
-        color: colors.main,
+        color: theme.primary,
         fontWeight: fontWeights.bold,
     },
 });

@@ -1,61 +1,67 @@
 import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
-import { colors } from '../../theme/colors';
+import { palette } from '../../theme/palette';
 import { formatValue } from '../../utils/formatValue';
 import AssetCard from '../../components/AssetCard';
 import arrow from '../../assets/icons/white/portfolio.png'
 import plus from '../../assets/icons/black/Plus-circle.png'
 import send from '../../assets/icons/black/Send.png'
+import { useTheme } from '../../theme/ThemeProvider';
+import { createCommonStyles } from '../../theme/commonStyles';
 
 export default function PortfolioScreen({ navigation }) {
+    const { theme } = useTheme();
+    const common = createCommonStyles(theme);
+    const s = styles(theme);
+
     return (
-        <ScrollView style={styles.container}
+        <ScrollView style={common.container}
             showsVerticalScrollIndicator={false}>
-            <View style={styles.header}>
-                <Text style={[typography.title, { color: colors.white, marginTop: 50, marginBottom: 20 }]}>
+            <View style={common.header}>
+                <Text style={[typography.title, { color: theme.headerText, marginTop: 50, marginBottom: 20 }]}>
                     Портфель
                 </Text>
 
-                <View style={[styles.block, { flexDirection: 'column', gap: 10 }]}>
+                <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
                     <Text style={typography.subtitle}>{formatValue(1200000, true)}</Text>
-                    <Text style={[typography.body, { color: colors.green, fontWeight: fontWeights.bold }]}>+{formatValue(100000, true)} (+10%)</Text>
+                    <Text style={[typography.body, { color: palette.green, fontWeight: fontWeights.bold }]}>+{formatValue(100000, true)} (+10%)</Text>
                 </View>
 
-                <View style={styles.buttonContainer}>
+                <View style={s.buttonContainer}>
                     <Pressable
                         style={({ pressed }) => [
-                            styles.button,
-                            pressed ? styles.buttonHover : null
+                            s.button,
+                            pressed ? s.buttonHover : null
                         ]}
                         onPress={() => navigation.navigate('Deposit')}
                     >
                         <Image
-                            style={styles.icon}
+                            style={s.icon}
                             source={plus}
                         />
-                        <Text style={styles.buttonText}>Пополнить</Text>
+                        <Text style={s.buttonText}>Пополнить</Text>
                     </Pressable>
                     <Pressable
                         style={({ pressed }) => [
-                            styles.button,
-                            pressed ? styles.buttonHover : null
+                            s.button,
+                            pressed ? s.buttonHover : null
                         ]}
                         onPress={() => navigation.navigate('Withdraw')}
                     >
                         <Image
-                            style={styles.icon}
+                            style={s.icon}
                             source={send}
                         />
-                        <Text style={styles.buttonText}>Вывести</Text>
+                        <Text style={s.buttonText}>Вывести</Text>
                     </Pressable>
                 </View>
 
 
             </View>
-            <View style={styles.body}>
+            <View style={common.body}>
                 <Text style={[typography.subtitle, { marginBottom: 20 }]}>Мои активы</Text>
 
-                <View style={styles.assetsContainer}>
+                <View style={s.assetsContainer}>
                     <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
                     <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
                     <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
@@ -68,31 +74,9 @@ export default function PortfolioScreen({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    header: {
-        backgroundColor: colors.main,
-        height: 350,
-        padding: 20,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-    },
-    body: {
-        padding: 20,
-        justifyContent: 'top',
-        backgroundColor: colors.background,
-        paddingBottom: 200,
-    },
-    block: {
-        backgroundColor: colors.white,
-        color: colors.black,
-        borderRadius: 20,
-        padding: 20,
-    },
+const styles = (theme) => StyleSheet.create({
     button: {
-        backgroundColor: colors.white,
+        backgroundColor: '#fff',
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 15,
@@ -104,10 +88,10 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     buttonHover: {
-        backgroundColor: colors.grayLight,
+        backgroundColor: theme.hover,
     },
     buttonText: {
-        color: colors.black,
+        color: theme.primaryText,
         fontWeight: fontWeights.bold,
         fontSize: fontSizes.default,
     },

@@ -1,42 +1,46 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { colors } from "../theme/colors";
+import { palette } from "../theme/palette";
 import { fontSizes, fontWeights, typography } from "../theme/typography";
+import { useTheme } from "../theme/ThemeProvider";
 
 export default function AssetCard({ companyName, amount, pricePerUnit, diffPerUnit, icon, navigation }) {
+    const { theme } = useTheme();
+    const s = styles(theme);
+
     return (
         <Pressable
             style={({ pressed }) => [
-                styles.container,
-                pressed ? { backgroundColor: colors.grayLight } : null
+                s.container,
+                pressed ? { backgroundColor: theme.hover } : null
             ]}
             onPress={() => navigation.navigate('StockInfo')}
         >
-            <View style={styles.imageContainer}>
+            <View style={s.imageContainer}>
                 <Image
                     source={icon}
-                    style={styles.image}
+                    style={s.image}
                 />
             </View>
 
-            <View style={styles.textContainer}>
-                <Text style={styles.label}>{companyName}</Text>
-                <Text style={styles.description}>{amount} шт.</Text>
+            <View style={s.textContainer}>
+                <Text style={s.label}>{companyName}</Text>
+                <Text style={s.description}>{amount} шт.</Text>
             </View>
 
-            <View style={[styles.textContainer, { alignItems: 'flex-end' }]}>
-                <Text style={styles.price}>{pricePerUnit * amount} ₽</Text>
-                <Text style={[typography.body, { color: colors.red }]}>{-diffPerUnit * amount} ₽ (-10%)</Text>
+            <View style={[s.textContainer, { alignItems: 'flex-end' }]}>
+                <Text style={s.price}>{pricePerUnit * amount} ₽</Text>
+                <Text style={[typography.body, { color: theme.loss }]}>{-diffPerUnit * amount} ₽ (-10%)</Text>
             </View>
         </Pressable>
     );
 }
 
-const styles = StyleSheet.create({
+const styles = (theme) => StyleSheet.create({
     container: {
-        backgroundColor: colors.white,
+        backgroundColor: theme.surface,
         flexDirection: "row",
         padding: 10,
-        borderColor: colors.grayLight,
+        borderColor: theme.border,
         borderWidth: 1,
         borderRadius: 10,
         gap: 10,
@@ -46,7 +50,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: 64,
         height: 64,
-        backgroundColor: colors.background,
+        backgroundColor: theme.background,
         borderRadius: 100,
         padding: 10,
     },
@@ -59,17 +63,17 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     label: {
-        color: colors.black,
+        color: theme.primaryText,
         fontSize: fontSizes.medium
     },
     description: {
-        color: colors.gray,
+        color: theme.secondaryText,
         fontSize: fontSizes.default,
         fontWeight: fontWeights.default,
     },
     price: {
         fontSize: fontSizes.default,
         fontWeight: fontWeights.bold,
-        color: colors.black,
+        color: theme.primaryText,
     },
 });

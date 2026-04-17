@@ -1,5 +1,5 @@
 import { ScrollView, Text, View } from "react-native";
-import { colors } from "../../theme/colors";
+import { palette } from "../../theme/palette";
 import { fontSizes, fontWeights, typography } from "../../theme/typography";
 import BackButton from '../../components/BackButton'
 import { StyleSheet } from "react-native";
@@ -7,8 +7,14 @@ import { Pressable } from "react-native";
 import { useState } from "react";
 import { formatValue } from "../../utils/formatValue";
 import { TextInput } from "react-native";
+import { useTheme } from "../../theme/ThemeProvider";
+import { createCommonStyles } from "../../theme/commonStyles";
 
 export default function BalanceOperationScreen({ navigation, type, balance = 0, onSubmit }) {
+    const { theme } = useTheme();
+    const common = createCommonStyles(theme);
+    const s = styles(theme);
+
     const [cardNumber, setCardNumber] = useState('');
     const [value, setValue] = useState('');
     const isDeposit = type === 'deposit';
@@ -48,64 +54,64 @@ export default function BalanceOperationScreen({ navigation, type, balance = 0, 
     return (
         <View style={{ flex: 1 }}>
             <BackButton navigation={navigation} />
-            <ScrollView style={styles.container}
+            <ScrollView style={common.container}
                 showsVerticalScrollIndicator={false}>
-                <View style={styles.header}>
-                    <Text style={[typography.title, { color: colors.white, marginTop: 90, marginBottom: 20 }]}>
+                <View style={common.header}>
+                    <Text style={[typography.title, { color: theme.headerText, marginTop: 90, marginBottom: 20 }]}>
                         {isDeposit ? 'Пополнение счета' : 'Вывести со счета'}
                     </Text>
                 </View>
 
 
-                <View style={styles.body}>
-                    <View style={[styles.block, { flexDirection: 'column', gap: 10 }]}>
-                        <Text style={[typography.body, { color: colors.gray }]}>Брокерский счет</Text>
+                <View style={common.body}>
+                    <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
+                        <Text style={[typography.body, { color: theme.secondaryText }]}>Брокерский счет</Text>
                         <Text style={typography.subtitle}>{formatValue(1200000, true)}</Text>
                     </View>
 
-                    <View style={styles.inputContainer}>
+                    <View style={s.inputContainer}>
                         <TextInput
                             placeholder="Номер карты"
                             value={cardNumber}
                             onChangeText={handleChangeCardNumber}
                             keyboardType="numeric"
-                            style={[styles.input, typography.subtitle, errorCardNumber ? styles.inputError : null]}
+                            style={[s.input, typography.subtitle, errorCardNumber ? s.inputError : null]}
                         />
 
                         {!!errorCardNumber && (
-                            <Text style={styles.errorText}>{errorCardNumber}</Text>
+                            <Text style={s.errorText}>{errorCardNumber}</Text>
                         )}
                     </View>
 
-                    <View style={styles.inputContainer}>
+                    <View style={s.inputContainer}>
                         <TextInput
                             placeholder="Сумма"
                             value={value}
                             onChangeText={handleChangeValue}
                             keyboardType="numeric"
-                            style={[styles.input, typography.subtitle, errorValue ? styles.inputError : null]}
+                            style={[s.input, typography.subtitle, errorValue ? s.inputError : null]}
                         />
 
                         {!!errorValue && (
-                            <Text style={styles.errorText}>{errorValue}</Text>
+                            <Text style={s.errorText}>{errorValue}</Text>
                         )}
                     </View>
                 </View>
             </ScrollView>
 
-            <View style={styles.buttonContainer}>
+            <View style={s.buttonContainer}>
                 <Pressable
                     disabled={isDisabled}
                     style={({ pressed }) => [
-                        styles.button,
-                        !isDisabled && pressed && styles.buttonHover,
-                        isDisabled && styles.buttonDisabled,
+                        s.button,
+                        !isDisabled && pressed && s.buttonHover,
+                        isDisabled && s.buttonDisabled,
                     ]}
                     onPress={() => onSubmit(Number(cardNumber), Number(value))}
                 >
                     <Text style={[
-                        styles.buttonText,
-                        isDisabled && styles.buttonTextDisabled
+                        s.buttonText,
+                        isDisabled && s.buttonTextDisabled
                     ]}>
                         {isDeposit ? 'Пополнить' : 'Перевести'}
                     </Text>
@@ -115,31 +121,7 @@ export default function BalanceOperationScreen({ navigation, type, balance = 0, 
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    header: {
-        backgroundColor: colors.main,
-        flex: 1,
-        padding: 20,
-        paddingBottom: 40,
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-    },
-    body: {
-        padding: 20,
-        justifyContent: 'top',
-        backgroundColor: colors.background,
-        paddingBottom: 200,
-    },
-    block: {
-        backgroundColor: colors.white,
-        color: colors.black,
-        borderRadius: 20,
-        padding: 20,
-        marginBottom: 50,
-    },
+const styles = (theme) => StyleSheet.create({
     buttonContainer: {
         position: 'absolute',
         bottom: 20,
@@ -149,7 +131,7 @@ const styles = StyleSheet.create({
         padding: 20
     },
     button: {
-        backgroundColor: colors.main,
+        backgroundColor: theme.primary,
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 15,
@@ -159,16 +141,16 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     buttonHover: {
-        backgroundColor: colors.mainDark,
+        backgroundColor: theme.primaryDark,
     },
     buttonDisabled: {
-        backgroundColor: colors.grayLight,
+        backgroundColor: theme.hover,
     },
     buttonTextDisabled: {
-        color: colors.gray,
+        color: theme.secondaryText,
     },
     buttonText: {
-        color: colors.white,
+        color: theme.alternativeText,
         fontWeight: fontWeights.bold,
         fontSize: fontSizes.default,
     },
@@ -180,7 +162,7 @@ const styles = StyleSheet.create({
 
     left: {
         fontSize: fontSizes.medium,
-        color: colors.black,
+        color: theme.primaryText,
     },
 
     right: {
@@ -197,10 +179,10 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 1,
-        borderColor: colors.grayLight,
-        backgroundColor: colors.white,
-        color: colors.black,
-        placeholderTextColor: colors.gray,
+        borderColor: theme.border,
+        backgroundColor: theme.surface,
+        color: theme.primaryText,
+        placeholderTextColor: theme.secondaryText,
         borderRadius: 8,
         padding: 10,
     },
