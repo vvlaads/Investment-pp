@@ -78,7 +78,7 @@ const styles = (theme) => StyleSheet.create({
         justifyContent: 'space-around',
         padding: 10,
         paddingTop: 5,
-        borderTopColor: '#fff',
+        borderTopColor: theme.border,
         borderTopWidth: 1,
         backgroundColor: theme.surface,
         height: 80,

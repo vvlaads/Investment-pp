@@ -14,6 +14,7 @@ import DepositScreen from './screens/balance/DepositScreen';
 import SettingsScreen from './screens/settings/SettingsScreen';
 import NotificationSettingsScreen from './screens/settings/NotificationSettingsScreen';
 import { AppProvider } from './utils/AppProvider';
+import HelpScreen from './screens/settings/HelpScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -89,6 +90,12 @@ export default function App() {
           <Stack.Screen
             name="NotificationSettings"
             component={NotificationSettingsScreen}
+            options={{ headerShown: false }}
+          />
+          {/* Без меню */}
+          <Stack.Screen
+            name="Help"
+            component={HelpScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

@@ -53,7 +53,7 @@ export default function ProfileScreen({ navigation }) {
                 <View style={s.optionContainer}>
                     <LinkButton label={'Настройки'} description={'Персонализация приложения'} icon={settings} pageName={'Settings'} navigation={navigation} />
                     <LinkButton label={'Уведомления'} description={'Управление уведомлениями'} icon={notification} pageName={'NotificationSettings'} navigation={navigation} />
-                    <LinkButton label={'Помощь'} description={'Центр поддержки'} icon={help} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Помощь'} description={'Центр поддержки'} icon={help} pageName={'Help'} navigation={navigation} />
                 </View>
 
                 <Pressable
