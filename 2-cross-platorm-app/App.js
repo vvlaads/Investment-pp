@@ -1,14 +1,16 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import LoginScreen from './screens/LoginScreen';
-import RegisterScreen from './screens/RegisterScreen';
-import StockInfoScreen from './screens/StockInfoScreen';
+import LoginScreen from './screens/auth/LoginScreen';
+import RegisterScreen from './screens/auth/RegisterScreen';
+import StockInfoScreen from './screens/stock/StockInfoScreen';
 import Tabs from './navigation/Tabs';
 import { StatusBar } from 'react-native';
 import { colors } from './theme/colors';
-import SellScreen from './screens/SellScreen';
-import BuyScreen from './screens/BuyScreen';
+import SellScreen from './screens/stock/SellScreen';
+import BuyScreen from './screens/stock/BuyScreen';
+import WithdrawScreen from './screens/balance/WithdrawScreen';
+import DepositScreen from './screens/balance/DepositScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -58,6 +60,20 @@ export default function App() {
           <Stack.Screen
             name="Buy"
             component={BuyScreen}
+            options={{ headerShown: false }}
+          />
+
+          {/* Без меню */}
+          <Stack.Screen
+            name="Deposit"
+            component={DepositScreen}
+            options={{ headerShown: false }}
+          />
+
+          {/* Без меню */}
+          <Stack.Screen
+            name="Withdraw"
+            component={WithdrawScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

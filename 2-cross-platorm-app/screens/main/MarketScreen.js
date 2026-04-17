@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { typography } from '../theme/typography';
-import { colors } from '../theme/colors';
-import AssetCard from '../components/AssetCard';
-import arrow from '../assets/icons/white/portfolio.png'
+import { typography } from '../../theme/typography';
+import { colors } from '../../theme/colors';
+import AssetCard from '../../components/AssetCard';
+import arrow from '../../assets/icons/white/portfolio.png'
 export default function MarketScreen({ navigation }) {
     return (
         <ScrollView style={styles.container}

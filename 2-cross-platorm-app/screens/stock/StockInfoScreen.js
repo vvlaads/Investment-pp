@@ -1,9 +1,9 @@
 import { Text, StyleSheet, ScrollView, View, Pressable } from 'react-native';
-import { colors } from '../theme/colors';
-import { fontSizes, fontWeights, typography } from '../theme/typography';
-import { formatValue } from '../utils/formatValue';
-import { formatProcent } from '../utils/formatProcent';
-import BackButton from '../components/BackButton';
+import { colors } from '../../theme/colors';
+import { fontSizes, fontWeights, typography } from '../../theme/typography';
+import { formatValue } from '../../utils/formatValue';
+import { formatProcent } from '../../utils/formatProcent';
+import BackButton from '../../components/BackButton';
 
 export default function StockInfoScreen({ navigation }) {
     const companyName = 'Apple';

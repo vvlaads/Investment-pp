@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
-import { fontSizes, fontWeights, typography } from '../theme/typography';
-import { colors } from '../theme/colors';
-import { PieChart } from '../components/PieChart';
+import { fontSizes, fontWeights, typography } from '../../theme/typography';
+import { colors } from '../../theme/colors';
+import { PieChart } from '../../components/PieChart';
 import Svg, { Circle } from 'react-native-svg';
-import { formatValue } from '../utils/formatValue';
+import { formatValue } from '../../utils/formatValue';
 
 export default function AnalyticsScreen() {
     const { width } = useWindowDimensions(); // ширина экрана

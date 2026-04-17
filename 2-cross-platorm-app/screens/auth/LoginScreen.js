@@ -1,7 +1,7 @@
 import { View, Text, TextInput, StyleSheet, Pressable, Image, useWindowDimensions, ScrollView } from 'react-native';
-import { fontSizes, fontWeights, typography } from '../theme/typography';
-import { colors } from '../theme/colors';
-import logo from '../assets/logo.png'
+import { fontSizes, fontWeights, typography } from '../../theme/typography';
+import { colors } from '../../theme/colors';
+import logo from '../../assets/logo.png'
 
 export default function LoginScreen({ navigation }) {
     const { width } = useWindowDimensions(); // ширина экрана

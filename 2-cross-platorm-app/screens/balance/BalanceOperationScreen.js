@@ -1,98 +1,94 @@
-import { Text, StyleSheet, ScrollView, View, Pressable } from 'react-native';
-import { colors } from '../theme/colors';
-import { fontSizes, fontWeights, typography } from '../theme/typography';
-import { formatValue } from '../utils/formatValue';
-import BackButton from '../components/BackButton';
-import { TextInput } from 'react-native';
-import { useState } from 'react';
+import { ScrollView, Text, View } from "react-native";
+import { colors } from "../../theme/colors";
+import { fontSizes, fontWeights, typography } from "../../theme/typography";
+import BackButton from '../../components/BackButton'
+import { StyleSheet } from "react-native";
+import { Pressable } from "react-native";
+import { useState } from "react";
+import { formatValue } from "../../utils/formatValue";
+import { TextInput } from "react-native";
 
-export default function TradeScreen({ navigation, type, stockName, price, availableAmount, balance, onSubmit }) {
-    const [amount, setAmount] = useState('');
-    const numericAmount = Number(amount);
+export default function BalanceOperationScreen({ navigation, type, balance = 0, onSubmit }) {
+    const [cardNumber, setCardNumber] = useState('');
+    const [value, setValue] = useState('');
+    const isDeposit = type === 'deposit';
 
-    const isSell = type === 'sell';
-
-    let error = '';
-    if (amount === '') {
-        error = '';
-    } else if (!Number.isFinite(numericAmount)) {
-        error = 'Введите число';
-    } else if (numericAmount <= 0) {
-        error = 'Больше 0';
-    } else if (isSell && numericAmount > availableAmount) {
-        error = `Макс: ${availableAmount}`;
-    } else if (!isSell && numericAmount * price > balance) {
-        error = 'Недостаточно средств';
+    let errorCardNumber = '';
+    let errorValue = '';
+    if (cardNumber === '') {
+        errorCardNumber = '';
+    } else if (isNaN(Number(cardNumber))) {
+        errorCardNumber = 'Номер должен состоять из цифр';
+    } else if (cardNumber.length != 16) {
+        errorCardNumber = 'Номер карты должен содержать 16 цифр';
     }
 
-    const isDisabled = !!error || amount === '';
-    const total = isDisabled ? 0 : numericAmount * price;
+    if (value === '') {
+        errorValue = '';
+    } else if (isNaN(Number(value))) {
+        errorValue = 'Введите число';
+    } else if (Number(value) <= 0) {
+        errorValue = 'Введите число больше 0';
+    } else if (!isDeposit && balance < Number(value)) {
+        errorValue = 'Недостаточно средств';
+    }
 
-    const handleChange = (text) => {
+    const isDisabled = !!errorCardNumber || !!errorValue || cardNumber === '' || value === '';
+
+    const handleChangeCardNumber = (text) => {
         const cleaned = text.replace(/[^0-9]/g, '');
-        setAmount(cleaned);
+        setCardNumber(cleaned);
+    };
+
+    const handleChangeValue = (text) => {
+        const cleaned = text.replace(/[^0-9]/g, '');
+        setValue(cleaned);
     };
 
     return (
         <View style={{ flex: 1 }}>
             <BackButton navigation={navigation} />
-
             <ScrollView style={styles.container}
                 showsVerticalScrollIndicator={false}>
                 <View style={styles.header}>
                     <Text style={[typography.title, { color: colors.white, marginTop: 90, marginBottom: 20 }]}>
-                        {isSell ? 'Продать' : 'Купить'} акцию
+                        {isDeposit ? 'Пополнение счета' : 'Вывести со счета'}
                     </Text>
                 </View>
 
 
                 <View style={styles.body}>
+                    <View style={[styles.block, { flexDirection: 'column', gap: 10 }]}>
+                        <Text style={[typography.body, { color: colors.gray }]}>Брокерский счет</Text>
+                        <Text style={typography.subtitle}>{formatValue(1200000, true)}</Text>
+                    </View>
+
                     <View style={styles.inputContainer}>
                         <TextInput
-                            placeholder="Количество"
-                            value={amount}
-                            onChangeText={handleChange}
+                            placeholder="Номер карты"
+                            value={cardNumber}
+                            onChangeText={handleChangeCardNumber}
                             keyboardType="numeric"
-                            style={[styles.input, typography.subtitle, error ? styles.inputError : null]}
+                            style={[styles.input, typography.subtitle, errorCardNumber ? styles.inputError : null]}
                         />
 
-                        {!!error && (
-                            <Text style={styles.errorText}>{error}</Text>
+                        {!!errorCardNumber && (
+                            <Text style={styles.errorText}>{errorCardNumber}</Text>
                         )}
                     </View>
 
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            placeholder="Сумма"
+                            value={value}
+                            onChangeText={handleChangeValue}
+                            keyboardType="numeric"
+                            style={[styles.input, typography.subtitle, errorValue ? styles.inputError : null]}
+                        />
 
-                    <View style={styles.block}>
-                        <View style={styles.row}>
-                            <Text style={[styles.left, { flex: 2 }]}>Название акции:</Text>
-                            <Text style={[styles.right, { flex: 1 }]}>{stockName}</Text>
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={[styles.left, { flex: 2 }]}>Стоимость акции:</Text>
-                            <Text style={[styles.right, { flex: 1 }]}>
-                                {formatValue(price, true)}
-                            </Text>
-                        </View>
-
-                        <View style={styles.row}>
-                            <Text style={[styles.left, { flex: 2 }]}>Количество:</Text>
-                            <Text style={[styles.right, { flex: 1 }]}>
-                                {error ? 0 : numericAmount} шт.
-                            </Text>
-                        </View>
-                    </View>
-
-
-                    <View style={styles.block}>
-                        <View style={styles.row}>
-                            <Text style={[typography.subtitle, { flex: 1, fontWeight: fontWeights.default }]}>
-                                Итого:
-                            </Text>
-                            <Text style={[typography.subtitle, { flex: 2, textAlign: 'right' }]}>
-                                {formatValue(total, true)}
-                            </Text>
-                        </View>
+                        {!!errorValue && (
+                            <Text style={styles.errorText}>{errorValue}</Text>
+                        )}
                     </View>
                 </View>
             </ScrollView>
@@ -105,13 +101,13 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
                         !isDisabled && pressed && styles.buttonHover,
                         isDisabled && styles.buttonDisabled,
                     ]}
-                    onPress={() => onSubmit(numericAmount)}
+                    onPress={() => onSubmit(Number(cardNumber), Number(value))}
                 >
                     <Text style={[
                         styles.buttonText,
                         isDisabled && styles.buttonTextDisabled
                     ]}>
-                        {isSell ? 'Продать' : 'Купить'}
+                        {isDeposit ? 'Пополнить' : 'Перевести'}
                     </Text>
                 </Pressable>
             </View>

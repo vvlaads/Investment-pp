@@ -1,13 +1,13 @@
 import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-native';
-import { fontSizes, fontWeights, typography } from '../theme/typography';
-import { colors } from '../theme/colors';
-import LinkButton from '../components/LinkButton';
-import card from '../assets/icons/blue/Credit-card.png'
-import send from '../assets/icons/blue/Send.png'
-import settings from '../assets/icons/blue/Settings.png'
-import notification from '../assets/icons/blue/Bell.png'
-import help from '../assets/icons/blue/Help-circle.png'
-import logOut from '../assets/icons/red/Log-out.png'
+import { fontSizes, fontWeights, typography } from '../../theme/typography';
+import { colors } from '../../theme/colors';
+import LinkButton from '../../components/LinkButton';
+import card from '../../assets/icons/blue/Credit-card.png'
+import send from '../../assets/icons/blue/Send.png'
+import settings from '../../assets/icons/blue/Settings.png'
+import notification from '../../assets/icons/blue/Bell.png'
+import help from '../../assets/icons/blue/Help-circle.png'
+import logOut from '../../assets/icons/red/Log-out.png'
 
 export default function ProfileScreen({ navigation }) {
     return (
@@ -38,8 +38,8 @@ export default function ProfileScreen({ navigation }) {
                 <Text style={[typography.subtitle, styles.sectionName]}>Операции</Text>
 
                 <View style={styles.optionContainer}>
-                    <LinkButton label={'Пополнить'} description={'Пополнить счет'} icon={card} pageName={'Portfolio'} navigation={navigation} />
-                    <LinkButton label={'Вывести'} description={'Перевод на другой счет'} icon={send} pageName={'Portfolio'} navigation={navigation} />
+                    <LinkButton label={'Пополнить'} description={'Пополнить счет'} icon={card} pageName={'Deposit'} navigation={navigation} />
+                    <LinkButton label={'Вывести'} description={'Перевод на другой счет'} icon={send} pageName={'Withdraw'} navigation={navigation} />
                 </View>
 
                 <Text style={[typography.subtitle, styles.sectionName]}>Настройки</Text>

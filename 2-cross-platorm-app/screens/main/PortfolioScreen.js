@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-native';
-import { fontSizes, fontWeights, typography } from '../theme/typography';
-import { colors } from '../theme/colors';
-import { formatValue } from '../utils/formatValue';
-import AssetCard from '../components/AssetCard';
-import arrow from '../assets/icons/white/portfolio.png'
-import plus from '../assets/icons/black/Plus-circle.png'
-import send from '../assets/icons/black/Send.png'
+import { fontSizes, fontWeights, typography } from '../../theme/typography';
+import { colors } from '../../theme/colors';
+import { formatValue } from '../../utils/formatValue';
+import AssetCard from '../../components/AssetCard';
+import arrow from '../../assets/icons/white/portfolio.png'
+import plus from '../../assets/icons/black/Plus-circle.png'
+import send from '../../assets/icons/black/Send.png'
 
 export default function PortfolioScreen({ navigation }) {
     return (
@@ -27,7 +27,7 @@ export default function PortfolioScreen({ navigation }) {
                             styles.button,
                             pressed ? styles.buttonHover : null
                         ]}
-                        onPress={() => alert('Click')}
+                        onPress={() => navigation.navigate('Deposit')}
                     >
                         <Image
                             style={styles.icon}
@@ -40,7 +40,7 @@ export default function PortfolioScreen({ navigation }) {
                             styles.button,
                             pressed ? styles.buttonHover : null
                         ]}
-                        onPress={() => alert('Click')}
+                        onPress={() => navigation.navigate('Withdraw')}
                     >
                         <Image
                             style={styles.icon}
