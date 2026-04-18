@@ -7,6 +7,9 @@ import arrow from '../../assets/icons/white/portfolio.png'
 import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
 import Search from '../../components/Search';
+import Option from '../../components/Option';
+import { FilterType } from '../../utils/FilterType';
+import { useState } from 'react';
 
 const icons = {
     plus: {
@@ -23,6 +26,12 @@ export default function PortfolioScreen({ navigation }) {
     const { isDark, theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
+    const [activeFilter, setActiveFilter] = useState(FilterType.ALL);
+
+    const selectFilter = (type) => {
+        setActiveFilter(type);
+        console.log('Выбрано', type);
+    }
 
     return (
         <ScrollView style={common.container}
@@ -77,6 +86,12 @@ export default function PortfolioScreen({ navigation }) {
                 />
 
                 <Text style={common.sectionName}>Мои активы</Text>
+
+                <View style={common.filterContainer}>
+                    <Option description={'Все'} value={FilterType.ALL === activeFilter} onClick={() => selectFilter(FilterType.ALL)} />
+                    <Option description={'Акции'} value={FilterType.STOCKS === activeFilter} onClick={() => selectFilter(FilterType.STOCKS)} />
+                    <Option description={'Облигации'} value={FilterType.BONDS === activeFilter} onClick={() => selectFilter(FilterType.BONDS)} />
+                </View>
 
                 <View style={s.assetsContainer}>
                     <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />

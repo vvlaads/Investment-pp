@@ -37,4 +37,10 @@ export const createCommonStyles = (theme) => StyleSheet.create({
         marginTop: 20,
         marginBottom: 20,
     },
+    filterContainer: {
+        flexDirection: 'row',
+        marginTop: 10,
+        marginBottom: 20,
+        gap: 10,
+    },
 });
