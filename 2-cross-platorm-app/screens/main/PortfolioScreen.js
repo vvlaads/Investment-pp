@@ -6,6 +6,7 @@ import AssetCard from '../../components/AssetCard';
 import arrow from '../../assets/icons/white/portfolio.png'
 import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
+import Search from '../../components/Search';
 
 const icons = {
     plus: {
@@ -68,6 +69,13 @@ export default function PortfolioScreen({ navigation }) {
 
             </View>
             <View style={common.body}>
+                <Search
+                    style={common.search}
+                    onSearch={(text) => {
+                        console.log("Ищем", text);
+                    }}
+                />
+
                 <Text style={common.sectionName}>Мои активы</Text>
 
                 <View style={s.assetsContainer}>

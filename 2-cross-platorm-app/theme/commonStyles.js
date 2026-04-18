@@ -32,5 +32,9 @@ export const createCommonStyles = (theme) => StyleSheet.create({
         fontSize: fontSizes.big,
         fontWeight: fontWeights.bold,
         marginBottom: 20,
-    }
+    },
+    search: {
+        marginTop: 20,
+        marginBottom: 20,
+    },
 });

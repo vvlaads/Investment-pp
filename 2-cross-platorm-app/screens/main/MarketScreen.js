@@ -5,6 +5,7 @@ import AssetCard from '../../components/AssetCard';
 import arrow from '../../assets/icons/white/portfolio.png'
 import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
+import Search from '../../components/Search';
 export default function MarketScreen({ navigation }) {
     const { theme } = useApp();
     const common = createCommonStyles(theme);
@@ -20,6 +21,13 @@ export default function MarketScreen({ navigation }) {
 
 
             <View style={common.body}>
+                <Search
+                    style={common.search}
+                    onSearch={(text) => {
+                        console.log("Ищем", text);
+                    }}
+                />
+
                 <Text style={common.sectionName}>Выгодные предложения</Text>
 
                 <View style={styles.assetsContainer}>
