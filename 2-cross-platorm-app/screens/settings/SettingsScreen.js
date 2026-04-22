@@ -2,7 +2,7 @@ import { Text, StyleSheet, ScrollView, View, Pressable } from 'react-native';
 import { palette } from '../../theme/palette';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import { formatValue } from '../../utils/formatValue';
-import { formatProcent } from '../../utils/formatProcent';
+import { formatPercent } from '../../utils/formatPercent';
 import BackButton from '../../components/BackButton';
 import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';

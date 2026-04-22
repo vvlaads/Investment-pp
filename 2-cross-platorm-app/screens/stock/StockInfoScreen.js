@@ -2,7 +2,7 @@ import { Text, StyleSheet, ScrollView, View, Pressable } from 'react-native';
 import { palette } from '../../theme/palette';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import { formatValue } from '../../utils/formatValue';
-import { formatProcent } from '../../utils/formatProcent';
+import { formatPercent } from '../../utils/formatPercent';
 import BackButton from '../../components/BackButton';
 import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
@@ -34,7 +34,7 @@ export default function StockInfoScreen({ navigation }) {
 
                     <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
                         <Text style={[typography.subtitle, { color: theme.primaryText }]}>{formatValue(amount * currentPricePerUnit, true)}</Text>
-                        <Text style={[typography.body, { color: diff > 0 ? theme.profit : theme.loss, fontWeight: fontWeights.bold }]}>{formatValue(diff, true)} ({formatProcent(procents, true)})</Text>
+                        <Text style={[typography.body, { color: diff > 0 ? theme.profit : theme.loss, fontWeight: fontWeights.bold }]}>{formatValue(diff, true)} ({formatPercent(procents, true)})</Text>
                         <Text style={{ fontSize: fontSizes.default, color: theme.secondaryText, fontWeight: fontWeights.bold }}>{amount} шт.</Text>
                     </View>
                 </View>

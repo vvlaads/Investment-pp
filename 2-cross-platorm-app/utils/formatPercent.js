@@ -1,4 +1,4 @@
-export function formatValue(value, withCurrency = false, withSign = false) {
+export function formatPercent(value, withPercent = false, withSign = false) {
     if (value === null || value === undefined || isNaN(value)) {
         return '';
     }
@@ -12,8 +12,8 @@ export function formatValue(value, withCurrency = false, withSign = false) {
     if (withSign) {
         result = Number(value) > 0 ? `+${result}` : result;
     }
-    if (withCurrency) {
-        result = `${result} ₽`;
+    if (withPercent) {
+        result = `${result} %`;
     }
     return result;
 }

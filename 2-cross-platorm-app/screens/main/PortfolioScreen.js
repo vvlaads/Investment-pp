@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Pressable, ScrollView, Image } from 'react-nati
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import { palette } from '../../theme/palette';
 import { formatValue } from '../../utils/formatValue';
+import { formatPercent } from '../../utils/formatPercent';
 import AssetCard from '../../components/AssetCard';
 import arrow from '../../assets/icons/white/portfolio.png'
 import { useApp } from '../../utils/AppProvider';
@@ -9,7 +10,9 @@ import { createCommonStyles } from '../../theme/commonStyles';
 import Search from '../../components/Search';
 import Option from '../../components/Option';
 import { FilterType } from '../../utils/FilterType';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { usePortfolio } from '../../hooks/usePortfolio';
+import LoadPage from '../../components/LoadPage';
 
 const icons = {
     plus: {
@@ -23,6 +26,9 @@ const icons = {
 };
 
 export default function PortfolioScreen({ navigation }) {
+    const { portfolio, assets, loading } = usePortfolio();
+    const [filteredAssets, setFilteredAssets] = useState([]);
+
     const { isDark, theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
@@ -33,6 +39,22 @@ export default function PortfolioScreen({ navigation }) {
         console.log('Выбрано', type);
     }
 
+    const handleSearch = (text) => {
+        const filtered = assets.filter(asset =>
+            asset.name.toLowerCase().includes(text.toLowerCase())
+        );
+
+        setFilteredAssets(filtered);
+    };
+
+    useEffect(() => {
+        setFilteredAssets(assets);
+    }, [assets]);
+
+    if (loading) return (<LoadPage />);
+    const diff = portfolio.total - portfolio.prev;
+    const percent = 100 * diff / portfolio.prev;
+    const isProfit = diff > 0;
     return (
         <ScrollView style={common.container}
             showsVerticalScrollIndicator={false}>
@@ -42,8 +64,12 @@ export default function PortfolioScreen({ navigation }) {
                 </Text>
 
                 <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
-                    <Text style={[typography.subtitle, { color: theme.primaryText }]}>{formatValue(1200000, true)}</Text>
-                    <Text style={[typography.body, { color: palette.green, fontWeight: fontWeights.bold }]}>+{formatValue(100000, true)} (+10%)</Text>
+                    <Text style={[typography.subtitle, { color: theme.primaryText }]}>
+                        {formatValue(portfolio.total, true)}
+                    </Text>
+                    <Text style={[typography.body, { color: isProfit ? theme.profit : theme.loss, fontWeight: fontWeights.bold }]}>
+                        {formatValue(diff, true, true)} ({formatPercent(percent, true, true)})
+                    </Text>
                 </View>
 
                 <View style={s.buttonContainer}>
@@ -80,9 +106,7 @@ export default function PortfolioScreen({ navigation }) {
             <View style={common.body}>
                 <Search
                     style={common.search}
-                    onSearch={(text) => {
-                        console.log("Ищем", text);
-                    }}
+                    onSearch={(text) => handleSearch(text)}
                 />
 
                 <Text style={common.sectionName}>Мои активы</Text>
@@ -94,12 +118,27 @@ export default function PortfolioScreen({ navigation }) {
                 </View>
 
                 <View style={s.assetsContainer}>
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
-                    <AssetCard companyName={'Apple'} amount={2} pricePerUnit={600} diffPerUnit={10} icon={arrow} navigation={navigation} />
+                    {filteredAssets.length > 0 ?
+                        filteredAssets.map((asset) => (
+                            <AssetCard
+                                key={asset.id}
+                                companyName={asset.name}
+                                amount={asset.amount}
+                                pricePerUnit={asset.price}
+                                prevPricePerUnit={asset.prevPrice}
+                                icon={arrow}
+                                onPress={() => navigation.navigate('StockInfo')} />
+                        ))
+                        :
+                        (
+                            <View style={s.emptyBlock}>
+                                <Text style={s.emptyBlockText}>
+                                    Не найдено
+                                </Text>
+                            </View>
+                        )
+                    }
+
                 </View>
             </View>
         </ScrollView>
@@ -139,5 +178,23 @@ const styles = (theme) => StyleSheet.create({
     icon: {
         width: 24,
         height: 24,
+    },
+
+    emptyBlock: {
+        backgroundColor: theme.hover,
+        width: '100%',
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20,
+        borderColor: theme.border,
+        borderStyle: 'dashed',
+        borderWidth: 3,
+    },
+
+    emptyBlockText: {
+        color: theme.secondaryText,
+        fontSize: fontSizes.medium,
+        fontWeight: fontWeights.bold,
     },
 });

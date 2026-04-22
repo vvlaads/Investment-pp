@@ -5,5 +5,5 @@ export const mockPortfolio = {
 
 export const mockAssets = [
     { id: 1, name: 'Apple', amount: 2, price: 600, prevPrice: 580 },
-    { id: 2, name: 'Tesla', amount: 1, price: 800, prevPrice: 810 },
+    { id: 2, name: 'Tesla', amount: 1, price: 800, prevPrice: 870 },
 ];

@@ -1,11 +1,20 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { palette } from "../theme/palette";
 import { fontSizes, fontWeights, typography } from "../theme/typography";
 import { useApp } from "../utils/AppProvider";
+import { formatValue } from "../utils/formatValue";
+import { formatPercent } from "../utils/formatPercent";
 
-export default function AssetCard({ companyName, amount, pricePerUnit, diffPerUnit, icon, navigation }) {
+export default function AssetCard({ companyName, amount, pricePerUnit, prevPricePerUnit, icon, onPress }) {
     const { theme } = useApp();
     const s = styles(theme);
+
+    const diff = pricePerUnit - prevPricePerUnit;
+    const isProfit = diff > 0;
+    const percent = prevPricePerUnit
+        ? (diff / prevPricePerUnit) * 100
+        : 0;
+
+    const profitColor = isProfit ? theme.profit : theme.loss;
 
     return (
         <Pressable
@@ -13,7 +22,7 @@ export default function AssetCard({ companyName, amount, pricePerUnit, diffPerUn
                 s.container,
                 pressed ? { backgroundColor: theme.hover } : null
             ]}
-            onPress={() => navigation.navigate('StockInfo')}
+            onPress={onPress}
         >
             <View style={s.imageContainer}>
                 <Image
@@ -27,9 +36,13 @@ export default function AssetCard({ companyName, amount, pricePerUnit, diffPerUn
                 <Text style={s.description}>{amount} шт.</Text>
             </View>
 
-            <View style={[s.textContainer, { alignItems: 'flex-end' }]}>
-                <Text style={s.price}>{pricePerUnit * amount} ₽</Text>
-                <Text style={[typography.body, { color: theme.loss }]}>{-diffPerUnit * amount} ₽ (-10%)</Text>
+            <View style={[s.textContainer, s.rightContainer]}>
+                <Text style={s.price}>
+                    {formatValue(pricePerUnit * amount, true)}
+                </Text>
+                <Text style={[typography.body, { color: profitColor }]}>
+                    {formatValue(diff * amount, true, true)} ({formatPercent(percent, true, true)})
+                </Text>
             </View>
         </Pressable>
     );
@@ -60,6 +73,10 @@ const styles = (theme) => StyleSheet.create({
     },
     textContainer: {
         flexDirection: "column",
+        flexShrink: 1,
+    },
+    rightContainer: {
+        alignItems: 'flex-end',
         flex: 1,
     },
     label: {
