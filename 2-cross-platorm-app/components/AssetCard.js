@@ -4,14 +4,14 @@ import { useApp } from "../utils/AppProvider";
 import { formatValue } from "../utils/formatValue";
 import { formatPercent } from "../utils/formatPercent";
 
-export default function AssetCard({ companyName, amount, pricePerUnit, prevPricePerUnit, icon, onPress }) {
+export default function AssetCard({ company, amount, buyPrice, icon, onPress }) {
     const { theme } = useApp();
     const s = styles(theme);
 
-    const diff = pricePerUnit - prevPricePerUnit;
+    const diff = company.currentPrice - buyPrice;
     const isProfit = diff > 0;
-    const percent = prevPricePerUnit
-        ? (diff / prevPricePerUnit) * 100
+    const percent = buyPrice
+        ? (diff / buyPrice) * 100
         : 0;
 
     const profitColor = isProfit ? theme.profit : theme.loss;
@@ -32,13 +32,13 @@ export default function AssetCard({ companyName, amount, pricePerUnit, prevPrice
             </View>
 
             <View style={s.textContainer}>
-                <Text style={s.label}>{companyName}</Text>
+                <Text style={s.label}>{company.name}</Text>
                 <Text style={s.description}>{amount} шт.</Text>
             </View>
 
             <View style={[s.textContainer, s.rightContainer]}>
                 <Text style={s.price}>
-                    {formatValue(pricePerUnit * amount, true)}
+                    {formatValue(company.currentPrice * amount, true)}
                 </Text>
                 <Text style={[typography.body, { color: profitColor }]}>
                     {formatValue(diff * amount, true, true)} ({formatPercent(percent, true, true)})

@@ -26,7 +26,7 @@ const icons = {
 };
 
 export default function PortfolioScreen({ navigation }) {
-    const { portfolio, assets, loading } = usePortfolio();
+    const { assets, loading } = usePortfolio();
     const [filteredAssets, setFilteredAssets] = useState([]);
 
     const { isDark, theme } = useApp();
@@ -41,19 +41,29 @@ export default function PortfolioScreen({ navigation }) {
 
     const handleSearch = (text) => {
         const filtered = assets.filter(asset =>
-            asset.name.toLowerCase().includes(text.toLowerCase())
+            asset.company.name.toLowerCase().includes(text.toLowerCase())
         );
 
         setFilteredAssets(filtered);
     };
+
+    const total = assets.reduce(
+        (sum, asset) => sum + asset.company.currentPrice * asset.amount,
+        0
+    );
+
+    const prev = assets.reduce(
+        (sum, asset) => sum + asset.buyPrice * asset.amount,
+        0
+    );
 
     useEffect(() => {
         setFilteredAssets(assets);
     }, [assets]);
 
     if (loading) return (<LoadPage />);
-    const diff = portfolio.total - portfolio.prev;
-    const percent = 100 * diff / portfolio.prev;
+    const diff = total - prev;
+    const percent = 100 * diff / prev;
     const isProfit = diff > 0;
     return (
         <ScrollView style={common.container}
@@ -65,7 +75,7 @@ export default function PortfolioScreen({ navigation }) {
 
                 <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
                     <Text style={[typography.subtitle, { color: theme.primaryText }]}>
-                        {formatValue(portfolio.total, true)}
+                        {formatValue(total, true)}
                     </Text>
                     <Text style={[typography.body, { color: isProfit ? theme.profit : theme.loss, fontWeight: fontWeights.bold }]}>
                         {formatValue(diff, true, true)} ({formatPercent(percent, true, true)})
@@ -122,10 +132,9 @@ export default function PortfolioScreen({ navigation }) {
                         filteredAssets.map((asset) => (
                             <AssetCard
                                 key={asset.id}
-                                companyName={asset.name}
+                                company={asset.company}
                                 amount={asset.amount}
-                                pricePerUnit={asset.price}
-                                prevPricePerUnit={asset.prevPrice}
+                                buyPrice={asset.buyPrice}
                                 icon={arrow}
                                 onPress={() => navigation.navigate('StockInfo')} />
                         ))
