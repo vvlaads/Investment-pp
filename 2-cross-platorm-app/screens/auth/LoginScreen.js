@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, Pressable, Image, useWindowDimensions, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable, Image, useWindowDimensions, ScrollView, ActivityIndicator } from 'react-native';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import logo from '../../assets/logo.png'
 import { useApp } from '../../utils/AppProvider';
@@ -122,7 +122,11 @@ export default function LoginScreen({ navigation }) {
                 onPress={handleLogin}
                 disabled={loading}
             >
-                <Text style={s.buttonText}>Войти</Text>
+                {loading ? (
+                    <ActivityIndicator color={theme.surface} />
+                ) : (
+                    <Text style={s.buttonText}>Войти</Text>
+                )}
             </Pressable>
 
             <View style={s.registerContainer}>
