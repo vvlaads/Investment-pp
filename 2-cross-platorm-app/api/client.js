@@ -1,7 +1,7 @@
-const BASE_URL = 'https://your-api.com';
+import { config } from "./config";
 
 export async function request(url, options = {}) {
-    const res = await fetch(BASE_URL + url, {
+    const res = await fetch(config.API_URL + url, {
         headers: {
             'Content-Type': 'application/json',
         },

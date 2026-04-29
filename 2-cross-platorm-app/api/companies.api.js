@@ -1,4 +1,4 @@
-import { apiAdapter } from './index';
+import { apiAdapter } from './apiAdapter';
 import { companies as mockCompanies } from '../mocks/companies';
 import { request } from './client';
 

@@ -1,8 +1,8 @@
-const USE_MOCK = true;
+import { config } from "./config";
 
 export function apiAdapter(realFn, mockFn) {
     return async (...args) => {
-        if (USE_MOCK) return mockFn(...args);
+        if (config.USE_MOCK) return mockFn(...args);
         return realFn(...args);
     };
 }

@@ -2,6 +2,8 @@ import { View, Text, TextInput, StyleSheet, Pressable, Image, useWindowDimension
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import logo from '../../assets/logo.png'
 import { useApp } from '../../utils/AppProvider';
+import { useState } from 'react';
+import { loginUser } from '../../api/auth.api';
 
 export default function LoginScreen({ navigation }) {
     const { theme } = useApp();
@@ -9,6 +11,55 @@ export default function LoginScreen({ navigation }) {
 
     const { width } = useWindowDimensions();
     const logoWidth = width < 400 ? width * 0.8 : 400;
+
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+
+    const validate = () => {
+        const newErrors = {};
+
+        // Проверка Email
+        if (!email.trim()) {
+            newErrors.email = 'Введите email';
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            newErrors.email = 'Неверный формат email';
+        }
+
+        // Проверка пароля
+        if (!password.trim()) {
+            newErrors.password = 'Введите пароль';
+        } else if (password.length < 6) {
+            newErrors.password = 'Пароль минимум 6 символов';
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    }
+
+    const handleLogin = async () => {
+        if (!validate()) return;
+
+        try {
+            setLoading(true);
+            setErrors({});
+
+            const response = await loginUser(email, password);
+
+            console.log('Login success:', response);
+            navigation.replace('Main');
+        } catch (error) {
+            console.log(error);
+            setErrors({
+                global: 'Ошибка входа. Попробуйте снова'
+            });
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <ScrollView
@@ -36,21 +87,40 @@ export default function LoginScreen({ navigation }) {
                     placeholder="Email"
                     placeholderTextColor={theme.secondaryText}
                     style={[s.input, typography.body]}
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
                 />
+                {errors.email &&
+                    <Text style={s.error}>{errors.email}</Text>}
+
                 <TextInput
                     placeholder="Password"
                     placeholderTextColor={theme.secondaryText}
                     secureTextEntry
                     style={[s.input, typography.body]}
+                    value={password}
+                    onChangeText={setPassword}
                 />
+                {errors.password &&
+                    (<Text style={s.error}>{errors.password}</Text>)}
             </View>
+
+            {errors.global && (
+                <Text style={[s.error, { textAlign: 'center', marginBottom: 10 }]}>
+                    {errors.global}
+                </Text>
+            )}
 
             <Pressable
                 style={({ pressed }) => [
                     s.button,
-                    pressed && s.buttonHover
+                    pressed && s.buttonHover,
+                    loading && { opacity: 0.7 }
                 ]}
-                onPress={() => navigation.replace('Main')}
+                onPress={handleLogin}
+                disabled={loading}
             >
                 <Text style={s.buttonText}>Войти</Text>
             </Pressable>
@@ -124,7 +194,7 @@ const styles = (theme) => StyleSheet.create({
     },
 
     buttonText: {
-        color: '#fff', // 👈 обычно фиксированный
+        color: theme.alternativeText,
         fontWeight: fontWeights.bold,
         fontSize: fontSizes.medium,
     },
@@ -132,5 +202,9 @@ const styles = (theme) => StyleSheet.create({
     link: {
         color: theme.primary,
         fontWeight: fontWeights.bold,
+    },
+    error: {
+        fontSize: fontSizes.default,
+        color: theme.error,
     },
 });
