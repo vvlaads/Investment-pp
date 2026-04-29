@@ -6,6 +6,10 @@ import { formatPercent } from '../../utils/formatPercent';
 import BackButton from '../../components/BackButton';
 import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
+import Option from '../../components/Option';
+import { useState } from 'react';
+import { GraphType } from '../../utils/GraphType';
+import { Area, CartesianChart, Line } from "victory-native";
 
 export default function StockInfoScreen({ navigation }) {
     const { theme } = useApp();
@@ -19,6 +23,19 @@ export default function StockInfoScreen({ navigation }) {
     const previousPricePerUnit = 650;
     const diff = (currentPricePerUnit - previousPricePerUnit) * amount;
     const procents = 100 * currentPricePerUnit / previousPricePerUnit - 100;
+
+    const [graphType, setGraphType] = useState(GraphType.DAY);
+    const selectGraphType = (type) => {
+        setGraphType(type);
+        console.log('Выбрано', type);
+    }
+
+    const data = [
+        { time: new Date('2026-04-25'), value: 580 },
+        { time: new Date('2026-04-26'), value: 590 },
+        { time: new Date('2026-04-27'), value: 605 },
+        { time: new Date('2026-04-28'), value: 600 },
+    ];
 
     return (
         <View style={{ flex: 1 }}>
@@ -39,9 +56,24 @@ export default function StockInfoScreen({ navigation }) {
                     </View>
                 </View>
                 <View style={common.body}>
-                    {/* TODO: График акции */}
                     <Text style={common.sectionName}>График</Text>
-                    <View style={[common.block, { marginBottom: 50 }]}></View>
+
+                    <View style={common.filterContainer}>
+                        <Option description={'Час'} value={graphType === GraphType.HOUR} onClick={() => selectGraphType(GraphType.HOUR)} />
+                        <Option description={'День'} value={graphType === GraphType.DAY} onClick={() => selectGraphType(GraphType.DAY)} />
+                        <Option description={'Месяц'} value={graphType === GraphType.MONTH} onClick={() => selectGraphType(GraphType.MONTH)} />
+                        <Option description={'Год'} value={graphType === GraphType.YEAR} onClick={() => selectGraphType(GraphType.YEAR)} />
+                    </View>
+
+                    <View style={common.block}>
+                        {/* <CartesianChart data={data} xKey="time" yKeys={["value"]}>
+                            {({ points, chartBounds }) =>
+                                <>
+                                    <Area points={points.value} y0={chartBounds.bottom} color="red" />
+                                </>
+                            }
+                        </CartesianChart> */}
+                    </View>
 
                     <Text style={common.sectionName}>О компании</Text>
                     <View style={common.block}>
