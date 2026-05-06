@@ -1,4 +1,4 @@
-import { Text, StyleSheet, ScrollView, View, Pressable } from 'react-native';
+import { Text, StyleSheet, ScrollView, View, Pressable, Dimensions } from 'react-native';
 import { palette } from '../../theme/palette';
 import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import { formatValue } from '../../utils/formatValue';
@@ -9,12 +9,14 @@ import { createCommonStyles } from '../../theme/commonStyles';
 import Option from '../../components/Option';
 import { useState } from 'react';
 import { GraphType } from '../../utils/GraphType';
-import { Area, CartesianChart, Line } from "victory-native";
+import StockChart from '../../components/StockChart';
 
 export default function StockInfoScreen({ navigation }) {
     const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
+
+    const screenWidth = Dimensions.get('window').width;
 
     const companyName = 'Apple';
     const companyDescr = 'Apple Inc. — ведущая технологическая компания, специализирующаяся на разработке инновационных продуктов и услуг для потребителей по всему миру.'
@@ -30,12 +32,46 @@ export default function StockInfoScreen({ navigation }) {
         console.log('Выбрано', type);
     }
 
-    const data = [
-        { time: new Date('2026-04-25'), value: 580 },
-        { time: new Date('2026-04-26'), value: 590 },
-        { time: new Date('2026-04-27'), value: 605 },
-        { time: new Date('2026-04-28'), value: 600 },
-    ];
+    const blockSize = screenWidth - common.body.padding * 2;
+    const chartBlockPadding = 10;
+    const stockData = {
+        hour: {
+            labels: ['12:00', '12:10', '12:20', '12:30', '12:40', '12:50', '13:00'],
+            datasets: [{ data: [22.56, 22.80, 22.81, 22.80, 22.75, 22.79] }],
+        },
+
+        day: {
+            labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'],
+            datasets: [{
+                data: [23.78, 24.54, 23.59, 24.01, 24.77, 25.06, 24.68]
+            }],
+        },
+
+        month: {
+            labels: ['1', '5', '10', '15', '20', '25', '30'],
+            datasets: [{ data: [23.56, 24.80, 25.6, 23.20, 22.7, 23.79] }],
+        },
+
+        year: {
+            labels: ['Янв', 'Март', 'Июнь', 'Сент', 'Дек'],
+            datasets: [{ data: [22.56, 24.89, 29.34, 26.56, 22.5] }],
+        }
+    };
+
+    const getStockData = () => {
+        switch (graphType) {
+            case GraphType.HOUR:
+                return stockData.hour;
+            case GraphType.DAY:
+                return stockData.day;
+            case GraphType.MONTH:
+                return stockData.month;
+            case GraphType.YEAR:
+                return stockData.year;
+            default:
+                return stockData.day;
+        }
+    }
 
     return (
         <View style={{ flex: 1 }}>
@@ -65,14 +101,11 @@ export default function StockInfoScreen({ navigation }) {
                         <Option description={'Год'} value={graphType === GraphType.YEAR} onClick={() => selectGraphType(GraphType.YEAR)} />
                     </View>
 
-                    <View style={common.block}>
-                        {/* <CartesianChart data={data} xKey="time" yKeys={["value"]}>
-                            {({ points, chartBounds }) =>
-                                <>
-                                    <Area points={points.value} y0={chartBounds.bottom} color="red" />
-                                </>
-                            }
-                        </CartesianChart> */}
+                    <View style={[common.block, { padding: chartBlockPadding, height: blockSize }]}>
+                        <StockChart
+                            width={blockSize - chartBlockPadding * 2}
+                            height={blockSize - chartBlockPadding * 2}
+                            data={getStockData()} />
                     </View>
 
                     <Text style={common.sectionName}>О компании</Text>
