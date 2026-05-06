@@ -1,0 +1,11 @@
+ktor:
+  deployment:
+    port: 8080
+  application:
+    modules:
+      - connection.HttpKt.configureHttp
+      - connection.SerializationKt.configureSerialization
+      - connection.SecurityKt.configureSecurity
+      - connection.DIKt.configureDependencyInjection
+      - connection.RabbitmqKt.configureRabbitmq
+      - connection.RoutingKt.configureRouting

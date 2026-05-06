@@ -32,3 +32,5 @@ replay_pid*
 
 # Kotlin Gradle plugin data
 .kotlin/
+
+docker/rabbitmq/data
