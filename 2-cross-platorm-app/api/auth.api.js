@@ -32,7 +32,7 @@ async function mockLogin(email, password) {
 export const loginUser = apiAdapter(login, mockLogin);
 
 async function register(data) {
-    return request('/auth/register', {
+    return request('/auth/sign-in', {
         method: 'POST',
         body: JSON.stringify(data),
     });
