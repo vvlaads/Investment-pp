@@ -1,4 +1,4 @@
-import { config } from "../utils/config"
+import config from "../utils/config"
 
 export async function request(url, options = {}) {
     const res = await fetch(config.API_URL + url, {
