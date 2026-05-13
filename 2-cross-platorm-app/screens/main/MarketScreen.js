@@ -10,22 +10,40 @@ import { useEffect, useState } from 'react';
 import { FilterType } from '../../utils/FilterType';
 import Option from '../../components/Option';
 import LoadPage from '../../components/LoadPage';
+import { getStocksApi } from '../../api/stocks.api';
 
 export default function MarketScreen({ navigation }) {
+    const [assets, setAssets] = useState([]);
+    const [filteredAssets, setFilteredAssets] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     const { theme } = useApp();
     const common = createCommonStyles(theme);
-    const [activeFilter, setActiveFilter] = useState(FilterType.ALL);
-    const [filteredAssets, setFilteredAssets] = useState([]);
     const s = styles(theme);
+
+    const [activeFilter, setActiveFilter] = useState(FilterType.ALL);
 
     const selectFilter = (type) => {
         setActiveFilter(type);
-        console.log('Выбрано', type);
-    }
+
+        if (type === FilterType.ALL) {
+            setFilteredAssets(assets);
+            return;
+        }
+
+        const filtered = assets.filter(asset =>
+            type === FilterType.STOCKS
+                ? asset.type === 'stock'
+                : asset.type === 'bond'
+        );
+
+        setFilteredAssets(filtered);
+    };
 
     const handleSearch = (text) => {
         const filtered = assets.filter(asset =>
-            asset.company.name.toLowerCase().includes(text.toLowerCase())
+            asset.name.toLowerCase().includes(text.toLowerCase()) ||
+            asset.ticker.toLowerCase().includes(text.toLowerCase())
         );
 
         setFilteredAssets(filtered);
@@ -33,8 +51,18 @@ export default function MarketScreen({ navigation }) {
 
 
     useEffect(() => {
-        setFilteredAssets(assets);
-    }, [assets]);
+        async function loadAssets() {
+            try {
+                const data = await getStocksApi();
+                setAssets(data.items);
+                setFilteredAssets(data.items);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadAssets();
+    }, []);
 
     if (loading) return (<LoadPage />);
 
@@ -66,12 +94,12 @@ export default function MarketScreen({ navigation }) {
                     {filteredAssets.length > 0 ?
                         filteredAssets.map((asset) => (
                             <AssetCard
-                                key={asset.id}
-                                company={asset.company}
-                                amount={asset.amount}
-                                buyPrice={asset.buyPrice}
+                                key={asset.ticker}
+                                asset={asset}
+                                variant='market'
                                 icon={arrow}
-                                onPress={() => navigation.navigate('StockInfo')} />
+                                onPress={() => navigation.navigate('StockInfo', { ticker: asset.ticker })}
+                            />
                         ))
                         :
                         (

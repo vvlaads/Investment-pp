@@ -158,10 +158,10 @@ export default function PortfolioScreen({ navigation }) {
                             <AssetCard
                                 key={asset.ticker}
                                 asset={asset}
+                                variant='portfolio'
                                 icon={arrow}
-                                onPress={() => navigation.navigate('StockInfo', {
-                                    ticker: asset.ticker
-                                })} />
+                                onPress={() => navigation.navigate('StockInfo', { ticker: asset.ticker })}
+                            />
                         ))
                         :
                         (

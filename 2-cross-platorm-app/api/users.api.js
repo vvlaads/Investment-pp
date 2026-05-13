@@ -30,9 +30,10 @@ async function mockGetUserStocks() {
 
     return [
         { ticker: 'GAZP', name: 'Газпром', quantity: 10, avgPurchasePrice: 60, currentPrice: 70, type: 'stock' },
-        { ticker: 'SBER', name: 'Сбербанк', quantity: 5, avgPurchasePrice: 130, currentPrice: 120, type: 'bond' },
+        { ticker: 'SBER', name: 'Сбербанк', quantity: 5, avgPurchasePrice: 130, currentPrice: 120, type: 'stock' },
         { ticker: 'AAPL', name: 'Apple', quantity: 3, avgPurchasePrice: 250, currentPrice: 248.7, type: 'stock' },
         { ticker: 'TSLA', name: 'Tesla', quantity: 6, avgPurchasePrice: 120, currentPrice: 118.6, type: 'stock' },
+        { ticker: 'OFZ26238', name: 'ОФЗ 26238', quantity: 1, avgPurchasePrice: 900, currentPrice: 915, type: 'bond' }
     ];
 }
 

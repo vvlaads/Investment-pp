@@ -4,16 +4,29 @@ import { useApp } from "../utils/AppProvider";
 import { formatValue } from "../utils/formatValue";
 import { formatPercent } from "../utils/formatPercent";
 
-export default function AssetCard({ asset, icon, onPress }) {
+export default function AssetCard({
+    asset,
+    icon,
+    onPress,
+    variant = 'portfolio'
+}) {
     const { theme } = useApp();
     const s = styles(theme);
 
-    const diff = asset.currentPrice - asset.avgPurchasePrice;
-    const percent = asset.avgPurchasePrice
+    const isPortfolio = variant === 'portfolio';
+
+    const diff = isPortfolio
+        ? asset.currentPrice - asset.avgPurchasePrice
+        : 0;
+
+    const percent = isPortfolio && asset.avgPurchasePrice
         ? (diff / asset.avgPurchasePrice) * 100
         : 0;
 
-    const totalProfit = diff * asset.quantity;
+    const totalProfit = isPortfolio
+        ? diff * asset.quantity
+        : 0;
+
     const isProfit = totalProfit >= 0;
 
     return (
@@ -32,17 +45,60 @@ export default function AssetCard({ asset, icon, onPress }) {
             </View>
 
             <View style={s.textContainer}>
-                <Text style={s.label}>{asset.ticker}</Text>
-                <Text style={s.description}>{asset.quantity} шт.</Text>
+                <Text style={s.label}>
+                    {asset.companyName || asset.ticker}
+                </Text>
+
+                <Text style={s.description}>
+                    {isPortfolio
+                        ? `${asset.quantity} шт.`
+                        : `${asset.ticker}${asset.isOwned ? ' · В портфеле' : ''}`
+                    }
+                </Text>
             </View>
 
             <View style={[s.textContainer, s.rightContainer]}>
                 <Text style={s.price}>
-                    {formatValue(asset.currentPrice * asset.quantity, true)}
+                    {isPortfolio
+                        ? formatValue(asset.currentPrice * asset.quantity, true)
+                        : formatValue(asset.currentPrice, true)
+                    }
                 </Text>
-                <Text style={[typography.body, { color: isProfit ? theme.profit : theme.loss }]}>
-                    {formatValue(totalProfit, true, true)} ({formatPercent(percent, true, true)})
-                </Text>
+
+                {isPortfolio ? (
+                    <Text
+                        style={[
+                            typography.body,
+                            {
+                                color: isProfit
+                                    ? theme.profit
+                                    : theme.loss
+                            }
+                        ]}
+                    >
+                        {formatValue(totalProfit, true, true)}
+                        {' '}
+                        ({formatPercent(percent, true, true)})
+                    </Text>
+                ) : (
+                    <Text
+                        style={[
+                            typography.body,
+                            {
+                                color:
+                                    asset.changePercent >= 0
+                                        ? theme.profit
+                                        : theme.loss
+                            }
+                        ]}
+                    >
+                        {formatPercent(
+                            asset.changePercent,
+                            true,
+                            true
+                        )}
+                    </Text>
+                )}
             </View>
         </Pressable>
     );
@@ -69,7 +125,7 @@ const styles = (theme) => StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: '100%'
+        height: '100%',
     },
     textContainer: {
         flexDirection: "column",
@@ -81,7 +137,7 @@ const styles = (theme) => StyleSheet.create({
     },
     label: {
         color: theme.primaryText,
-        fontSize: fontSizes.medium
+        fontSize: fontSizes.medium,
     },
     description: {
         color: theme.secondaryText,
