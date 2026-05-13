@@ -6,8 +6,14 @@ import Svg, { Circle } from 'react-native-svg';
 import { formatValue } from '../../utils/formatValue';
 import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
+import { useEffect, useState } from 'react';
+import LoadPage from '../../components/LoadPage';
+import { getUserStocksApi } from '../../api/users.api';
 
 export default function AnalyticsScreen() {
+    const [assets, setAssets] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
@@ -15,10 +21,36 @@ export default function AnalyticsScreen() {
     const { width } = useWindowDimensions(); // ширина экрана
     const blockSize = width * 0.9;
 
-    const stocks = 500
-    const bonds = 300
-    const gold = 200
-    const total = stocks + bonds + gold
+    useEffect(() => {
+        async function loadInfo() {
+            try {
+                const data = await getUserStocksApi();
+                setAssets(data);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadInfo();
+    }, []);
+
+    if (loading) return (<LoadPage />)
+
+    const stocks = assets
+        .filter(asset => asset.type === 'stock')
+        .reduce(
+            (sum, asset) => sum + asset.currentPrice * asset.quantity,
+            0
+        );
+
+    const bonds = assets
+        .filter(asset => asset.type === 'bond')
+        .reduce(
+            (sum, asset) => sum + asset.currentPrice * asset.quantity,
+            0
+        );
+
+    const total = stocks + bonds
 
     const chartData = [
         {
@@ -30,11 +62,6 @@ export default function AnalyticsScreen() {
             name: 'Облигации',
             color: palette.pink,
             value: bonds,
-        },
-        {
-            name: 'Золото',
-            color: palette.orange,
-            value: gold,
         },
     ];
 
