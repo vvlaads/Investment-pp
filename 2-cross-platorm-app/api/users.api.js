@@ -29,9 +29,10 @@ async function mockGetUserStocks() {
     await new Promise(resolve => setTimeout(resolve, 1500));
 
     return [
-        { ticker: 'GAZP', name: 'Газпром', quantity: 10 },
-        { ticker: 'SBER', name: 'Сбербанк', quantity: 5 },
-        // TODO: Добавить больше акций
+        { ticker: 'GAZP', name: 'Газпром', quantity: 10, avgPurchasePrice: 60, currentPrice: 70, type: 'stock' },
+        { ticker: 'SBER', name: 'Сбербанк', quantity: 5, avgPurchasePrice: 130, currentPrice: 120, type: 'bond' },
+        { ticker: 'AAPL', name: 'Apple', quantity: 3, avgPurchasePrice: 250, currentPrice: 248.7, type: 'stock' },
+        { ticker: 'TSLA', name: 'Tesla', quantity: 6, avgPurchasePrice: 120, currentPrice: 118.6, type: 'stock' },
     ];
 }
 

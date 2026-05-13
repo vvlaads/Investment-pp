@@ -9,11 +9,9 @@ import Search from '../../components/Search';
 import { useEffect, useState } from 'react';
 import { FilterType } from '../../utils/FilterType';
 import Option from '../../components/Option';
-import { usePortfolio } from '../../hooks/usePortfolio';
 import LoadPage from '../../components/LoadPage';
 
 export default function MarketScreen({ navigation }) {
-    const { assets, loading } = usePortfolio();
     const { theme } = useApp();
     const common = createCommonStyles(theme);
     const [activeFilter, setActiveFilter] = useState(FilterType.ALL);

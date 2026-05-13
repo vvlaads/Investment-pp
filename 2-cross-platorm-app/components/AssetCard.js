@@ -4,17 +4,17 @@ import { useApp } from "../utils/AppProvider";
 import { formatValue } from "../utils/formatValue";
 import { formatPercent } from "../utils/formatPercent";
 
-export default function AssetCard({ company, amount, buyPrice, icon, onPress }) {
+export default function AssetCard({ asset, icon, onPress }) {
     const { theme } = useApp();
     const s = styles(theme);
 
-    const diff = company.currentPrice - buyPrice;
-    const isProfit = diff > 0;
-    const percent = buyPrice
-        ? (diff / buyPrice) * 100
+    const diff = asset.currentPrice - asset.avgPurchasePrice;
+    const percent = asset.avgPurchasePrice
+        ? (diff / asset.avgPurchasePrice) * 100
         : 0;
 
-    const profitColor = isProfit ? theme.profit : theme.loss;
+    const totalProfit = diff * asset.quantity;
+    const isProfit = totalProfit >= 0;
 
     return (
         <Pressable
@@ -32,16 +32,16 @@ export default function AssetCard({ company, amount, buyPrice, icon, onPress }) 
             </View>
 
             <View style={s.textContainer}>
-                <Text style={s.label}>{company.name}</Text>
-                <Text style={s.description}>{amount} шт.</Text>
+                <Text style={s.label}>{asset.ticker}</Text>
+                <Text style={s.description}>{asset.quantity} шт.</Text>
             </View>
 
             <View style={[s.textContainer, s.rightContainer]}>
                 <Text style={s.price}>
-                    {formatValue(company.currentPrice * amount, true)}
+                    {formatValue(asset.currentPrice * asset.quantity, true)}
                 </Text>
-                <Text style={[typography.body, { color: profitColor }]}>
-                    {formatValue(diff * amount, true, true)} ({formatPercent(percent, true, true)})
+                <Text style={[typography.body, { color: isProfit ? theme.profit : theme.loss }]}>
+                    {formatValue(totalProfit, true, true)} ({formatPercent(percent, true, true)})
                 </Text>
             </View>
         </Pressable>
