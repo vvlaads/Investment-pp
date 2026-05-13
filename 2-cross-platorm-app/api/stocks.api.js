@@ -1,3 +1,4 @@
+import stocksInfo from "../mock/stocksInfo";
 import { apiAdapter } from "./apiAdapter";
 import { request } from "./client";
 
@@ -39,20 +40,9 @@ async function getStockInfo(ticker, beginDate, endDate) {
         },
     });
 }
-
 async function mockGetStockInfo(ticker, beginDate, endDate) {
     await new Promise(resolve => setTimeout(resolve, 1500));
-
-    return {
-        ticker,
-        beginDate,
-        endDate,
-        data: [
-            { date: '2023-01-01', price: 100 },
-            { date: '2023-01-02', price: 105 },
-            // TODO: Добавить больше данных
-        ],
-    };
+    return stocksInfo[ticker];
 }
 
 export const getStockInfoApi = apiAdapter(getStockInfo, mockGetStockInfo);

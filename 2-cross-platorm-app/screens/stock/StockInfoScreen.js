@@ -7,56 +7,31 @@ import BackButton from '../../components/BackButton';
 import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
 import Option from '../../components/Option';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GraphType } from '../../utils/GraphType';
 import StockChart from '../../components/StockChart';
+import LoadPage from '../../components/LoadPage';
+import { getStockInfoApi } from '../../api/stocks.api';
 
-export default function StockInfoScreen({ navigation }) {
+export default function StockInfoScreen({ navigation, route }) {
+    const { ticker } = route.params;
+
+    const [loading, setLoading] = useState(true);
+    const [stock, setStock] = useState(null);
+
     const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
 
     const screenWidth = Dimensions.get('window').width;
-
-    const companyName = 'Apple';
-    const companyDescr = 'Apple Inc. — ведущая технологическая компания, специализирующаяся на разработке инновационных продуктов и услуг для потребителей по всему миру.'
-    const amount = 2;
-    const currentPricePerUnit = 600;
-    const previousPricePerUnit = 650;
-    const diff = (currentPricePerUnit - previousPricePerUnit) * amount;
-    const procents = 100 * currentPricePerUnit / previousPricePerUnit - 100;
+    const blockSize = screenWidth - common.body.padding * 2;
+    const chartBlockPadding = 10;
 
     const [graphType, setGraphType] = useState(GraphType.DAY);
     const selectGraphType = (type) => {
         setGraphType(type);
         console.log('Выбрано', type);
     }
-
-    const blockSize = screenWidth - common.body.padding * 2;
-    const chartBlockPadding = 10;
-    const stockData = {
-        hour: {
-            labels: ['12:00', '12:10', '12:20', '12:30', '12:40', '12:50', '13:00'],
-            datasets: [{ data: [22.56, 22.80, 22.81, 22.80, 22.75, 22.79] }],
-        },
-
-        day: {
-            labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'],
-            datasets: [{
-                data: [23.78, 24.54, 23.59, 24.01, 24.77, 25.06, 24.68]
-            }],
-        },
-
-        month: {
-            labels: ['1', '5', '10', '15', '20', '25', '30'],
-            datasets: [{ data: [23.56, 24.80, 25.6, 23.20, 22.7, 23.79] }],
-        },
-
-        year: {
-            labels: ['Янв', 'Март', 'Июнь', 'Сент', 'Дек'],
-            datasets: [{ data: [22.56, 24.89, 29.34, 26.56, 22.5] }],
-        }
-    };
 
     const getStockData = () => {
         switch (graphType) {
@@ -73,6 +48,33 @@ export default function StockInfoScreen({ navigation }) {
         }
     }
 
+    useEffect(() => {
+        async function loadStock() {
+            try {
+                const data = await getStockInfoApi(ticker);
+                setStock(data);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadStock();
+    }, [ticker]);
+
+    if (loading) return (<LoadPage />)
+
+    const companyName = stock.name;
+    const companyDescr = stock.description;
+    const quantity = stock.quantity;
+    const currentPrice = stock.currentPrice;
+    const avgPurchasePrice = stock.avgPurchasePrice;
+    const stockData = stock.history;
+
+    const diff = (currentPrice - avgPurchasePrice) * quantity;
+    const procents = avgPurchasePrice ?
+        ((currentPrice - avgPurchasePrice) / avgPurchasePrice) * 100
+        : 0;
+
     return (
         <View style={{ flex: 1 }}>
             <BackButton navigation={navigation} />
@@ -86,9 +88,9 @@ export default function StockInfoScreen({ navigation }) {
                     </Text>
 
                     <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
-                        <Text style={[typography.subtitle, { color: theme.primaryText }]}>{formatValue(amount * currentPricePerUnit, true)}</Text>
+                        <Text style={[typography.subtitle, { color: theme.primaryText }]}>{formatValue(quantity * currentPrice, true)}</Text>
                         <Text style={[typography.body, { color: diff > 0 ? theme.profit : theme.loss, fontWeight: fontWeights.bold }]}>{formatValue(diff, true)} ({formatPercent(procents, true)})</Text>
-                        <Text style={{ fontSize: fontSizes.default, color: theme.secondaryText, fontWeight: fontWeights.bold }}>{amount} шт.</Text>
+                        <Text style={{ fontSize: fontSizes.default, color: theme.secondaryText, fontWeight: fontWeights.bold }}>{quantity} шт.</Text>
                     </View>
                 </View>
                 <View style={common.body}>
@@ -121,7 +123,7 @@ export default function StockInfoScreen({ navigation }) {
                                 pressed ? { backgroundColor: theme.primaryDark } : null,
 
                             ]}
-                            onPress={() => navigation.navigate("Buy")}
+                            onPress={() => navigation.navigate("Buy", { ticker })}
                         >
                             <Text style={[s.buttonText, { color: theme.headerText }]}>Купить</Text>
                         </Pressable>
@@ -130,7 +132,7 @@ export default function StockInfoScreen({ navigation }) {
                                 s.button,
                                 pressed ? s.buttonHover : null
                             ]}
-                            onPress={() => navigation.navigate("Sell")}
+                            onPress={() => navigation.navigate("Sell", { ticker })}
                         >
                             <Text style={s.buttonText}>Продать</Text>
                         </Pressable>
