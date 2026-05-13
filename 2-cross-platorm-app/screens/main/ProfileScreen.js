@@ -10,28 +10,72 @@ import help from '../../assets/icons/blue/Help-circle.png'
 import logOut from '../../assets/icons/red/Log-out.png'
 import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
+import { useEffect, useState } from 'react';
+import LoadPage from '../../components/LoadPage';
+import { getUserInfoApi, getUserStocksApi } from '../../api/users.api';
+import { formatValue } from '../../utils/formatValue';
+import { formatPercent } from '../../utils/formatPercent';
 
 export default function ProfileScreen({ navigation }) {
+    const [loading, setLoading] = useState(true);
+    const [totalSum, setTotalSum] = useState(0);
+    const [percent, setPercent] = useState(0);
+    const [surname, setSurname] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [patronymic, setPatronymic] = useState('');
+
     const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
+
+    useEffect(() => {
+        async function loadInfo() {
+            try {
+                const data = await getUserStocksApi();
+                const assetsSum = data.reduce(
+                    (sum, asset) => sum + asset.currentPrice * asset.quantity,
+                    0
+                )
+                const purchaseSum = data.reduce(
+                    (sum, asset) => sum + asset.avgPurchasePrice * asset.quantity,
+                    0
+                )
+                const diff = assetsSum - purchaseSum;
+
+                setTotalSum(assetsSum);
+                setPercent(100 * diff / purchaseSum);
+
+                const userInfo = await getUserInfoApi();
+
+                setSurname(userInfo.surname);
+                setFirstName(userInfo.firstName);
+                setPatronymic(userInfo.patronymic);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadInfo();
+    }, []);
+
+    if (loading) return (<LoadPage />);
 
     return (
         <ScrollView style={common.container}
             showsVerticalScrollIndicator={false}>
             <View style={common.header}>
                 <Text style={[typography.title, { color: theme.headerText, marginTop: 50, marginBottom: 20 }]}>
-                    Иванов Алексей Владимирович
+                    {surname} {firstName} {patronymic}
                 </Text>
 
                 <View style={s.statisticsContainer}>
                     <View style={[common.block, s.statBlock]}>
-                        <Text style={[typography.subtitle, { color: theme.primary }]}>1.2М ₽</Text>
+                        <Text style={[typography.subtitle, { color: theme.primary }]}>{formatValue(totalSum, true)}</Text>
                         <Text style={[typography.body, { color: theme.secondaryText }]}>Портфель</Text>
                     </View>
 
                     <View style={[common.block, s.statBlock]}>
-                        <Text style={[typography.subtitle, { color: theme.profit }]}>+4.2%</Text>
+                        <Text style={[typography.subtitle, { color: theme.profit }]}>{formatPercent(percent, true, true)}</Text>
                         <Text style={[typography.body, { color: theme.secondaryText }]}>Доход</Text>
                     </View>
                 </View>

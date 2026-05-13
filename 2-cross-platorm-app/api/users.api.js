@@ -13,7 +13,9 @@ async function mockGetUserInfo() {
     return {
         id: 1,
         email: 'test@test.com',
-        name: 'Test User',
+        surname: 'Иванов',
+        firstName: 'Андрей',
+        patronymic: 'Сергеевич'
     };
 }
 

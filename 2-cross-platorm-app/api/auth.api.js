@@ -24,7 +24,9 @@ async function mockLogin(email, password) {
         user: {
             id: 1,
             email,
-            name: 'Test User',
+            surname: 'Иванов',
+            firstName: 'Андрей',
+            patronymic: 'Сергеевич'
         },
     };
 }
