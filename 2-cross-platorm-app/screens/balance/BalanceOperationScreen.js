@@ -4,13 +4,18 @@ import { fontSizes, fontWeights, typography } from "../../theme/typography";
 import BackButton from '../../components/BackButton'
 import { StyleSheet } from "react-native";
 import { Pressable } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatValue } from "../../utils/formatValue";
 import { TextInput } from "react-native";
 import { createCommonStyles } from "../../theme/commonStyles";
 import { useApp } from "../../utils/AppProvider";
+import { getBalanceApi } from "../../api/wallet.api";
+import LoadPage from "../../components/LoadPage";
 
-export default function BalanceOperationScreen({ navigation, type, balance = 0, onSubmit }) {
+export default function BalanceOperationScreen({ navigation, type, onSubmit }) {
+    const [loading, setLoading] = useState(true);
+    const [balance, setBalance] = useState(0);
+
     const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
@@ -18,6 +23,21 @@ export default function BalanceOperationScreen({ navigation, type, balance = 0, 
     const [cardNumber, setCardNumber] = useState('');
     const [value, setValue] = useState('');
     const isDeposit = type === 'deposit';
+
+    useEffect(() => {
+        async function loadWallet() {
+            try {
+                const balance = await getBalanceApi();
+                setBalance(balance);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadWallet();
+    }, []);
+
+    if (loading) return (<LoadPage />);
 
     let errorCardNumber = '';
     let errorValue = '';
@@ -66,7 +86,7 @@ export default function BalanceOperationScreen({ navigation, type, balance = 0, 
                 <View style={common.body}>
                     <View style={[common.block, { flexDirection: 'column', gap: 10 }]}>
                         <Text style={[typography.body, { color: theme.secondaryText }]}>Брокерский счет</Text>
-                        <Text style={[typography.subtitle, { color: theme.primaryText }]}>{formatValue(1200000, true)}</Text>
+                        <Text style={[typography.subtitle, { color: theme.primaryText }]}>{formatValue(balance, true)}</Text>
                     </View>
 
                     <View style={s.inputContainer}>

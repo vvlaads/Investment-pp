@@ -1,3 +1,4 @@
+import { depositApi } from "../../api/wallet.api";
 import BalanceOperationScreen from "./BalanceOperationScreen";
 
 //Пополнение счета
@@ -8,6 +9,7 @@ export default function DepositScreen({ navigation }) {
             type="deposit"
             onSubmit={(cardNumber, value) => {
                 console.log('deposit', cardNumber, value);
+                depositApi(value);
                 navigation.goBack();
             }}
         />

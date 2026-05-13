@@ -1,3 +1,4 @@
+import { withdrawApi } from "../../api/wallet.api";
 import BalanceOperationScreen from "./BalanceOperationScreen";
 
 //Вывод средств
@@ -6,9 +7,9 @@ export default function WithdrawScreen({ navigation }) {
         <BalanceOperationScreen
             navigation={navigation}
             type="withdraw"
-            balance={120000}
             onSubmit={(cardNumber, value) => {
                 console.log('withdraw', cardNumber, value);
+                withdrawApi(value);
                 navigation.goBack();
             }}
         />
