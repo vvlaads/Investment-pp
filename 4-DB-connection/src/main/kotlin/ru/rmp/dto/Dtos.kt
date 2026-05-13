@@ -39,3 +39,14 @@ data class QuoteResponse(
     val updatedAt: Instant
 )
 
+data class InstrumentResponse(
+    val ticker: String,
+    val name: String
+)
+
+data class HealthResponse(
+    val status: String,
+    val service: String,
+    val timestamp: Instant
+)
+

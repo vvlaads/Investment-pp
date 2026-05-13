@@ -6,14 +6,20 @@ spring:
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:50}
+      minimum-idle: ${DB_POOL_MIN:5}
+      connection-timeout: 10000
   jpa:
     hibernate:
       ddl-auto: update
+    open-in-view: false
     show-sql: false
     properties:
       hibernate:
         format_sql: true
         default_schema: public
+        jdbc.batch_size: 50
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   data:
     redis:
@@ -24,9 +30,24 @@ server:
   port: ${SERVER_PORT:8081}
   error:
     include-message: always
-    include-exception: true
+    include-exception: false
+  tomcat:
+    threads:
+      max: ${TOMCAT_THREADS_MAX:400}
+      min-spare: 20
+    accept-count: 200
+    max-connections: 20000
 
 jwt:
   secret: ${JWT_SECRET:InvestmentsPlusPlusSecretKeyForSigningTokensMinimum32Characters}
-  expiration-ms: 86400000
+  expiration-ms: ${JWT_EXPIRATION_MS:86400000}
 
+market:
+  tick-ms: ${MARKET_TICK_MS:1000}
+
+logging:
+  level:
+    root: ${LOG_LEVEL_ROOT:INFO}
+    ru.rmp: ${LOG_LEVEL_APP:INFO}
+    org.hibernate.SQL: WARN
+    org.springframework.security: WARN
