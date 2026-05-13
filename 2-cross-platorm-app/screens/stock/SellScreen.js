@@ -1,15 +1,17 @@
+import { sellStockApi } from "../../api/stocks.api";
 import TradeScreen from "./TradeScreen";
 
-export default function SellScreen({ navigation }) {
+export default function SellScreen({ navigation, route }) {
+    const { ticker } = route.params;
+
     return (
         <TradeScreen
             navigation={navigation}
             type="sell"
-            stockName="AAPL"
-            price={600}
-            availableAmount={12}
-            onSubmit={(amount) => {
-                console.log('SELL', amount);
+            ticker={ticker}
+            onSubmit={(quantity) => {
+                console.log('SELL', quantity);
+                sellStockApi({ ticker: ticker, quantity: quantity });
                 navigation.goBack();
             }}
         />

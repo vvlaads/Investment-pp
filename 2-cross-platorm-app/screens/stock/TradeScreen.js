@@ -4,40 +4,68 @@ import { fontSizes, fontWeights, typography } from '../../theme/typography';
 import { formatValue } from '../../utils/formatValue';
 import BackButton from '../../components/BackButton';
 import { TextInput } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useApp } from '../../utils/AppProvider';
 import { createCommonStyles } from '../../theme/commonStyles';
+import LoadPage from '../../components/LoadPage';
+import { getStockInfoApi } from '../../api/stocks.api';
+import { getBalanceApi } from '../../api/wallet.api';
 
-export default function TradeScreen({ navigation, type, stockName, price, availableAmount, balance, onSubmit }) {
+export default function TradeScreen({ navigation, type, ticker, onSubmit }) {
+    const [loading, setLoading] = useState(true);
+    const [stock, setStock] = useState(null);
+    const [balance, setBalance] = useState(0);
+
+    const [quantity, setQuantity] = useState('');
+
     const { theme } = useApp();
     const common = createCommonStyles(theme);
     const s = styles(theme);
 
-    const [amount, setAmount] = useState('');
-    const numericAmount = Number(amount);
+    useEffect(() => {
+        async function loadStock() {
+            try {
+                const data = await getStockInfoApi(ticker);
+                setStock(data);
+
+                const balance = await getBalanceApi();
+                setBalance(balance);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadStock();
+    }, [ticker]);
+
+    if (loading) return (<LoadPage />);
 
     const isSell = type === 'sell';
-
-    let error = '';
-    if (amount === '') {
-        error = '';
-    } else if (!Number.isFinite(numericAmount)) {
-        error = 'Введите число';
-    } else if (numericAmount <= 0) {
-        error = 'Больше 0';
-    } else if (isSell && numericAmount > availableAmount) {
-        error = `Макс: ${availableAmount}`;
-    } else if (!isSell && numericAmount * price > balance) {
-        error = 'Недостаточно средств';
-    }
-
-    const isDisabled = !!error || amount === '';
-    const total = isDisabled ? 0 : numericAmount * price;
+    const numericQuantity = Number(quantity);
 
     const handleChange = (text) => {
         const cleaned = text.replace(/[^0-9]/g, '');
-        setAmount(cleaned);
+        setQuantity(cleaned);
     };
+
+    const price = stock.currentPrice;
+
+    let error = '';
+    if (quantity === '') {
+        error = '';
+    } else if (!Number.isFinite(numericQuantity)) {
+        error = 'Введите число';
+    } else if (numericQuantity <= 0) {
+        error = 'Больше 0';
+    } else if (isSell && numericQuantity > stock.quantity) {
+        error = `Макс: ${stock.quantity}`;
+    } else if (!isSell && numericQuantity * price > balance) {
+        error = 'Недостаточно средств';
+    }
+
+    const isDisabled = !!error || quantity === '';
+    const total = isDisabled ? 0 : numericQuantity * price;
+
 
     return (
         <View style={{ flex: 1 }}>
@@ -56,7 +84,7 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
                     <View style={s.inputContainer}>
                         <TextInput
                             placeholder="Количество"
-                            value={amount}
+                            value={quantity}
                             onChangeText={handleChange}
                             keyboardType="numeric"
                             style={[s.input, typography.subtitle, error ? s.inputError : null]}
@@ -71,7 +99,7 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
                     <View style={common.block}>
                         <View style={s.row}>
                             <Text style={s.left}>Название акции:</Text>
-                            <Text style={s.right}>{stockName}</Text>
+                            <Text style={s.right}>{stock.name}</Text>
                         </View>
 
                         <View style={s.row}>
@@ -84,7 +112,7 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
                         <View style={s.row}>
                             <Text style={s.left}>Количество:</Text>
                             <Text style={s.right}>
-                                {error ? 0 : numericAmount} шт.
+                                {error ? 0 : numericQuantity} шт.
                             </Text>
                         </View>
                     </View>
@@ -111,7 +139,7 @@ export default function TradeScreen({ navigation, type, stockName, price, availa
                         !isDisabled && pressed && s.buttonHover,
                         isDisabled && s.buttonDisabled,
                     ]}
-                    onPress={() => onSubmit(numericAmount)}
+                    onPress={() => onSubmit(numericQuantity)}
                 >
                     <Text style={[
                         s.buttonText,

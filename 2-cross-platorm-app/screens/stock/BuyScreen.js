@@ -1,15 +1,17 @@
+import { buyStockApi } from "../../api/stocks.api";
 import TradeScreen from "./TradeScreen";
 
-export default function BuyScreen({ navigation }) {
+export default function BuyScreen({ navigation, route }) {
+    const { ticker } = route.params;
+
     return (
         <TradeScreen
             navigation={navigation}
             type="buy"
-            stockName="AAPL"
-            price={600}
-            balance={100000}
-            onSubmit={(amount) => {
-                console.log('BUY', amount);
+            ticker={ticker}
+            onSubmit={(quantity) => {
+                console.log('BUY', quantity);
+                buyStockApi({ ticker: ticker, quantity: quantity });
                 navigation.goBack();
             }}
         />
