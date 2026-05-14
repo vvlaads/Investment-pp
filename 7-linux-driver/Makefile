@@ -1,10 +1,7 @@
-# Имя итогового модуля (будет quote_sim.ko)
 obj-m += quote_sim.o
 
-# Если модуль состоит из нескольких файлов (а так и будет), перечисляем их:
-quote_sim-objs := main.o
+quote_sim-objs := main.o gen_random_walk.o fmt_csv.o
 
-# Путь к исходникам текущего ядра
 KDIR := /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
 
