@@ -96,5 +96,20 @@ services:
     profiles:
       - imitator
 
+  quotes-receiver:
+    build:
+      context: ../
+      dockerfile: docker/quotes-integration/Dockerfile
+    container_name: investment-quotes-receiver
+    privileged: true
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/api/v1/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+
 volumes:
   postgres_data:
