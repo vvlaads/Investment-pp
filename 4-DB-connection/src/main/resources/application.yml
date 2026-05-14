@@ -25,6 +25,18 @@ spring:
     redis:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:admin}
+    password: ${RABBITMQ_PASSWORD:admin}
+    virtual-host: ${RABBITMQ_VHOST:/}
+    connection-timeout: 10000
+    template:
+      retry:
+        enabled: true
+        initial-interval: 500
+        max-attempts: 3
 
 server:
   port: ${SERVER_PORT:8081}
@@ -44,6 +56,11 @@ jwt:
 
 market:
   tick-ms: ${MARKET_TICK_MS:1000}
+  spread-bps: ${MARKET_SPREAD_BPS:25}
+
+rabbitmq:
+  quotes-queue: ${RABBITMQ_QUOTES_QUEUE:quotes-queue}
+  publish-enabled: ${RABBITMQ_PUBLISH_ENABLED:true}
 
 logging:
   level:
@@ -51,3 +68,4 @@ logging:
     ru.rmp: ${LOG_LEVEL_APP:INFO}
     org.hibernate.SQL: WARN
     org.springframework.security: WARN
+    org.springframework.amqp: WARN

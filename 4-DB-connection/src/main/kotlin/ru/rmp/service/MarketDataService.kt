@@ -17,7 +17,8 @@ import java.util.concurrent.ThreadLocalRandom
 @Service
 class MarketDataService(
     private val instrumentRepository: InstrumentRepository,
-    private val redis: StringRedisTemplate
+    private val redis: StringRedisTemplate,
+    private val quotePublisher: QuotePublisher
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -69,6 +70,8 @@ class MarketDataService(
             return
         }
         val rnd = ThreadLocalRandom.current()
+        val snapshots = ArrayList<QuoteSnapshot>(instruments.size)
+        val now = System.currentTimeMillis()
         for (inst in instruments) {
             val base = basePrices.getOrPut(inst.ticker) { generateBasePrice(inst.ticker) }
             val prev = currentPrices[inst.ticker] ?: readFromRedis(inst.ticker) ?: base
@@ -81,8 +84,15 @@ class MarketDataService(
             if (next > ceil) next = ceil
             next = next.setScale(4, RoundingMode.HALF_UP).max(BigDecimal("0.01"))
             currentPrices[inst.ticker] = next
-            lastUpdate[inst.ticker] = System.currentTimeMillis()
+            lastUpdate[inst.ticker] = now
             writeToRedis(inst.ticker, next)
+            val changePct = if (prev.signum() == 0) 0.0
+            else next.subtract(prev).divide(prev, 6, RoundingMode.HALF_UP)
+                .multiply(BigDecimal(100)).toDouble()
+            snapshots.add(QuoteSnapshot(inst.ticker, next, changePct, now))
+        }
+        if (snapshots.isNotEmpty()) {
+            quotePublisher.publish(snapshots)
         }
     }
 
