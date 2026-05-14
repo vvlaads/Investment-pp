@@ -1,8 +1,15 @@
 name: investment-pp
+
+networks:
+  investment-net:
+    driver: bridge
+
 services:
   rabbitmq:
     image: rabbitmq:3-management
     container_name: investment-rabbitmq
+    networks:
+      - investment-net
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -20,6 +27,8 @@ services:
   postgres:
     image: postgres:16
     container_name: investment-postgres
+    networks:
+      - investment-net
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -37,6 +46,8 @@ services:
   redis:
     image: redis:7-alpine
     container_name: investment-redis
+    networks:
+      - investment-net
     ports:
       - "6379:6379"
     healthcheck:
@@ -50,6 +61,8 @@ services:
       context: ../4-DB-connection
       dockerfile: Dockerfile
     container_name: investment-db-service
+    networks:
+      - investment-net
     depends_on:
       postgres:
         condition: service_healthy
@@ -70,6 +83,8 @@ services:
       RABBITMQ_USER: admin
       RABBITMQ_PASSWORD: admin
       RABBITMQ_QUOTES_QUEUE: quotes-queue
+      RABBITMQ_INVESTMENT_EXCHANGE: investment-exchange
+      RABBITMQ_INVESTMENT_QUEUE: investment-queue
       RABBITMQ_PUBLISH_ENABLED: "true"
       SERVER_PORT: 8081
       JWT_SECRET: InvestmentsPlusPlusSecretKeyForSigningTokensMinimum32Characters
@@ -83,11 +98,62 @@ services:
       retries: 10
       start_period: 30s
 
+  gateway:
+    build:
+      context: ../3-connection-app
+      dockerfile: Dockerfile
+    container_name: investment-gateway
+    networks:
+      - investment-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      db-service:
+        condition: service_healthy
+    environment:
+      RABBITMQ_URI: amqp://admin:admin@rabbitmq:5672
+      RABBITMQ_INVESTMENT_EXCHANGE: investment-exchange
+      RABBITMQ_RPC_TIMEOUT_MS: 10000
+      JWT_SECRET: InvestmentsPlusPlusSecretKeyForSigningTokensMinimum32Characters
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+
+  quotes-receiver:
+    build:
+      context: ../
+      dockerfile: docker/quotes-integration/Dockerfile
+    container_name: investment-quotes-receiver
+    networks:
+      - investment-net
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    privileged: true
+    ports:
+      - "8082:8080"
+    environment:
+      RABBITMQ_URL: amqp://admin:admin@rabbitmq:5672/
+      RABBITMQ_QUOTES_QUEUE: quotes-queue
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/api/v1/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+
   imitator:
     build:
       context: ../5-connection-imitator
       dockerfile: Dockerfile
     container_name: investment-imitator
+    networks:
+      - investment-net
     depends_on:
       db-service:
         condition: service_healthy
@@ -103,21 +169,6 @@ services:
       JAVA_OPTS: "-Xms512m -Xmx2g"
     profiles:
       - imitator
-
-  quotes-receiver:
-    build:
-      context: ../
-      dockerfile: docker/quotes-integration/Dockerfile
-    container_name: investment-quotes-receiver
-    privileged: true
-    ports:
-      - "8080:8080"
-    healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost:8080/api/v1/health"]
-      interval: 10s
-      timeout: 3s
-      retries: 10
-      start_period: 30s
 
 volumes:
   postgres_data:

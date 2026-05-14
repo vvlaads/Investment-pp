@@ -13,7 +13,7 @@ import ru.rmp.service.AuthService
 @RequestMapping("/api/auth")
 class AuthController(private val authService: AuthService) {
 
-    @PostMapping("/register")
+    @PostMapping("/register", "/sign-in")
     fun register(@RequestBody req: RegisterRequest): AuthResponse =
         authService.register(req)
 
@@ -21,4 +21,3 @@ class AuthController(private val authService: AuthService) {
     fun login(@RequestBody req: LoginRequest): AuthResponse =
         authService.login(req)
 }
-

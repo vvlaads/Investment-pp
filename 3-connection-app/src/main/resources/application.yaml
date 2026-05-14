@@ -1,6 +1,7 @@
 ktor:
   deployment:
     port: 8080
+    host: 0.0.0.0
   application:
     modules:
       - connection.HttpKt.configureHttp
@@ -9,3 +10,11 @@ ktor:
       - connection.DIKt.configureDependencyInjection
       - connection.RabbitmqKt.configureRabbitmq
       - connection.RoutingKt.configureRouting
+
+rabbitmq:
+  uri: ${RABBITMQ_URI:amqp://admin:admin@localhost:5672}
+  exchange: ${RABBITMQ_INVESTMENT_EXCHANGE:investment-exchange}
+  rpcTimeoutMs: ${RABBITMQ_RPC_TIMEOUT_MS:10000}
+
+jwt:
+  secret: ${JWT_SECRET:InvestmentsPlusPlusSecretKeyForSigningTokensMinimum32Characters}

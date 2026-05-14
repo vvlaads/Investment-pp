@@ -29,6 +29,8 @@ dependencies {
     implementation(libs.damirdenisTudor.ktorServerRabbitmq)
     implementation(libs.logback.classic)
     implementation(libs.openfolder.kotlinAsyncapiKtor)
+    implementation(libs.rabbitmq.amqpClient)
+    implementation(libs.auth0.jwt)
 
     testImplementation(kotlin("test"))
     testImplementation(ktorLibs.server.testHost)

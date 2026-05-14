@@ -25,7 +25,7 @@ COPY --from=builder /app/quotes-receiver .
 COPY 7-linux-driver/ ./driver/
 
 # Create a startup script to load the driver and start the app
-COPY <<EOF /app/entrypoint.sh
+COPY <<'EOF' /app/entrypoint.sh
 #!/bin/bash
 set -e
 
@@ -49,7 +49,12 @@ echo "1" > /sys/kernel/financial/control
 
 echo "Starting quotes-receiver..."
 cd /app
-./quotes-receiver -driver /dev/financial_quotes -port 8080 -interval 100
+./quotes-receiver \
+    -driver /dev/financial_quotes \
+    -port 8080 \
+    -interval 100 \
+    -rabbitmq "${RABBITMQ_URL:-amqp://guest:guest@localhost:5672/}" \
+    -queue "${RABBITMQ_QUOTES_QUEUE:-quotes-queue}"
 EOF
 
 RUN chmod +x /app/entrypoint.sh

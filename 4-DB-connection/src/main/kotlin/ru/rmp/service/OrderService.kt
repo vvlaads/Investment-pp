@@ -39,8 +39,20 @@ class OrderService(
         userRepository.save(user)
 
         val existing = portfolioPositionRepository.findByUserIdAndInstrumentId(userId, instrument.id)
-        val position = existing ?: PortfolioPosition(user = user, instrument = instrument, quantity = BigDecimal.ZERO)
-        position.quantity = position.quantity.add(quantity)
+        val position = existing ?: PortfolioPosition(
+            user = user,
+            instrument = instrument,
+            quantity = BigDecimal.ZERO,
+            avgPrice = BigDecimal.ZERO
+        )
+        val oldQty = position.quantity
+        val oldAvg = position.avgPrice
+        val newQty = oldQty.add(quantity)
+        val newAvg = if (newQty.signum() == 0) BigDecimal.ZERO
+        else oldAvg.multiply(oldQty).add(price.multiply(quantity))
+            .divide(newQty, 4, RoundingMode.HALF_UP)
+        position.quantity = newQty
+        position.avgPrice = newAvg
         portfolioPositionRepository.save(position)
 
         val order = Order(
@@ -71,10 +83,11 @@ class OrderService(
         userRepository.save(user)
 
         position.quantity = position.quantity.subtract(quantity)
-        if (position.quantity.compareTo(BigDecimal.ZERO) == 0)
+        if (position.quantity.compareTo(BigDecimal.ZERO) == 0) {
             portfolioPositionRepository.delete(position)
-        else
+        } else {
             portfolioPositionRepository.save(position)
+        }
 
         val order = Order(
             user = user,

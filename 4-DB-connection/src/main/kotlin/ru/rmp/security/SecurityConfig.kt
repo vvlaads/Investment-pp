@@ -2,6 +2,7 @@ package ru.rmp.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -29,6 +30,7 @@ class SecurityConfig(
                 auth
                     .requestMatchers(
                         "/api/auth/register",
+                        "/api/auth/sign-in",
                         "/api/auth/login",
                         "/api/quotes",
                         "/api/quotes/**",
@@ -37,6 +39,7 @@ class SecurityConfig(
                         "/api/health",
                         "/health"
                     ).permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/stocks", "/api/stocks/list", "/api/stocks/").permitAll()
                     .requestMatchers("/api/**").authenticated()
                     .anyRequest().permitAll()
             }

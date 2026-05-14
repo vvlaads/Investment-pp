@@ -10,7 +10,9 @@ import java.util.Optional
 
 interface UserRepository : JpaRepository<User, Long> {
     fun findByLogin(login: String): User?
+    fun findByEmail(email: String): User?
     fun existsByLogin(login: String): Boolean
+    fun existsByEmail(email: String): Boolean
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select u from User u where u.id = :id")

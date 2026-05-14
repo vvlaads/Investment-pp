@@ -4,9 +4,12 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import ru.rmp.dto.QuoteResponse
 import ru.rmp.entity.Instrument
+import ru.rmp.entity.PriceHistoryEntry
 import ru.rmp.repository.InstrumentRepository
+import ru.rmp.repository.PriceHistoryRepository
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.Duration
@@ -17,6 +20,7 @@ import java.util.concurrent.ThreadLocalRandom
 @Service
 class MarketDataService(
     private val instrumentRepository: InstrumentRepository,
+    private val priceHistoryRepository: PriceHistoryRepository,
     private val redis: StringRedisTemplate,
     private val quotePublisher: QuotePublisher
 ) {
@@ -61,6 +65,7 @@ class MarketDataService(
         return base
     }
 
+    @Transactional
     @Scheduled(fixedDelayString = "\${market.tick-ms:1000}")
     fun tick() {
         val instruments = try {
@@ -71,7 +76,9 @@ class MarketDataService(
         }
         val rnd = ThreadLocalRandom.current()
         val snapshots = ArrayList<QuoteSnapshot>(instruments.size)
+        val historyEntries = ArrayList<PriceHistoryEntry>(instruments.size)
         val now = System.currentTimeMillis()
+        val recordedAt = Instant.ofEpochMilli(now)
         for (inst in instruments) {
             val base = basePrices.getOrPut(inst.ticker) { generateBasePrice(inst.ticker) }
             val prev = currentPrices[inst.ticker] ?: readFromRedis(inst.ticker) ?: base
@@ -90,6 +97,16 @@ class MarketDataService(
             else next.subtract(prev).divide(prev, 6, RoundingMode.HALF_UP)
                 .multiply(BigDecimal(100)).toDouble()
             snapshots.add(QuoteSnapshot(inst.ticker, next, changePct, now))
+            historyEntries.add(
+                PriceHistoryEntry(instrumentId = inst.id, price = next, recordedAt = recordedAt)
+            )
+        }
+        if (historyEntries.isNotEmpty()) {
+            try {
+                priceHistoryRepository.saveAll(historyEntries)
+            } catch (e: Exception) {
+                log.warn("Не удалось записать price_history: {}", e.message)
+            }
         }
         if (snapshots.isNotEmpty()) {
             quotePublisher.publish(snapshots)

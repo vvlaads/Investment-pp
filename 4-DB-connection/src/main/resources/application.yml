@@ -61,6 +61,8 @@ market:
 rabbitmq:
   quotes-queue: ${RABBITMQ_QUOTES_QUEUE:quotes-queue}
   publish-enabled: ${RABBITMQ_PUBLISH_ENABLED:true}
+  investment-exchange: ${RABBITMQ_INVESTMENT_EXCHANGE:investment-exchange}
+  investment-queue: ${RABBITMQ_INVESTMENT_QUEUE:investment-queue}
 
 logging:
   level:

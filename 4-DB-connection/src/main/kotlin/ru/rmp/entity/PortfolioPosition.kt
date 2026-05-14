@@ -24,6 +24,8 @@ data class PortfolioPosition(
     var instrument: Instrument? = null,
 
     @Column(nullable = false, precision = 20, scale = 6)
-    var quantity: BigDecimal = BigDecimal.ZERO
-)
+    var quantity: BigDecimal = BigDecimal.ZERO,
 
+    @Column(name = "avg_price", nullable = false, precision = 20, scale = 4)
+    var avgPrice: BigDecimal = BigDecimal.ZERO
+)

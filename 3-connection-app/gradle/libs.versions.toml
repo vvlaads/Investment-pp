@@ -6,6 +6,8 @@ logback = "1.5.21"
 damirdenisTudor-ktorServerRabbitmq = { module = "io.github.damirdenis-tudor:ktor-server-rabbitmq", version = "1.5.0" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 openfolder-kotlinAsyncapiKtor = { module = "org.openfolder:kotlin-asyncapi-ktor", version = "3.2.1" }
+rabbitmq-amqpClient = { module = "com.rabbitmq:amqp-client", version = "5.21.0" }
+auth0-jwt = { module = "com.auth0:java-jwt", version = "4.4.0" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
