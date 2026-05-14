@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 // Quote represents a financial quote
@@ -112,6 +113,81 @@ func (dr *DriverReader) read() {
 	dr.store.Update(quotes)
 }
 
+// RabbitMQReceiver reads quotes from RabbitMQ
+type RabbitMQReceiver struct {
+	connStr string
+	queue   string
+	store   *QuoteStore
+}
+
+func NewRabbitMQReceiver(connStr, queue string, store *QuoteStore) *RabbitMQReceiver {
+	return &RabbitMQReceiver{
+		connStr: connStr,
+		queue:   queue,
+		store:    store,
+	}
+}
+
+func (r *RabbitMQReceiver) Start(ctx context.Context) {
+	conn, err := amqp.Dial(r.connStr)
+	if err != nil {
+		log.Printf("Failed to connect to RabbitMQ: %v", err)
+		return
+	}
+	defer conn.Close()
+
+	ch, err := conn.Channel()
+	if err != nil {
+		log.Printf("Failed to open a channel: %v", err)
+		return
+	}
+	defer ch.Close()
+
+	q, err := ch.QueueDeclare(
+		r.queue, // name
+		true,    // durable
+		false,   // delete until go-away
+		false,   // exclusive
+		false,   // no-dur
+		nil,     // arguments
+	)
+	if err != nil {
+		log.Printf("Failed to declare a queue: %v", err)
+		return
+	}
+
+	msgs, err := ch.Consume(
+		q.Name, // queue
+		"",     // consumer
+		true,   // auto-ack
+		false,  // exclusive
+		false,  // no-local
+		false,  // no-wait
+		nil,    // args
+	)
+	if err != nil {
+		log.Printf("Failed to register a consumer: %v", err)
+		return
+	}
+
+	log.Printf("RabbitMQ receiver started, listening on queue: %s", r.queue)
+
+	for {
+		select {
+		case <-ctx.Done():
+			log.Println("RabbitMQ receiver stopping...")
+			return
+		case d := <-msgs:
+			var quotes []Quote
+			if err := json.Unmarshal(d.Body, &quotes); err != nil {
+				log.Printf("Error parsing JSON from RabbitMQ: %v", err)
+				continue
+			}
+			r.store.Update(quotes)
+		}
+	}
+}
+
 // Handlers
 type Handler struct {
 	store      *QuoteStore
@@ -160,15 +236,19 @@ func main() {
 	port := flag.Int("port", 8080, "HTTP port")
 	driverPath := flag.String("driver", "/dev/financial_quotes", "path to device")
 	interval := flag.Int("interval", 100, "reading interval in ms")
+	rabbitMQURL := flag.String("rabbitmq", "amqp://guest:guest@localhost:5672/", "RabbitMQ connection URL")
+	queueName := flag.String("queue", "quotes-queue", "RabbitMQ queue name")
 	flag.Parse()
 
 	store := NewQuoteStore()
 	reader := NewDriverReader(*driverPath, *interval, store)
+	receiver := NewRabbitMQReceiver(*rabbitMQURL, *queueName, store)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	go reader.Start(ctx)
+	go receiver.Start(ctx)
 
 	h := &Handler{
 		store:      store,
@@ -201,7 +281,7 @@ func main() {
 	<-stop
 	log.Println("Shutting down server...")
 
-	cancel() // Stop driver reader
+	cancel() // Stop driver reader and receiver
 
 	ctxShutdown, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancelShutdown()

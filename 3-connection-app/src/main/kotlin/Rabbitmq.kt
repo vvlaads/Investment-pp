@@ -41,6 +41,24 @@ fun Application.configureRabbitmq() {
 
     rabbitmq {
         queueBind {
+            queue = "investment-queue"
+            exchange = "investment-exchange"
+            routingKey = "investment-key"
+            exchangeDeclare {
+                exchange = "investment-exchange"
+                type = "direct"
+            }
+            queueDeclare {
+                queue = "investment-queue"
+                durable = true
+            }
+        }
+    }
+
+
+
+    rabbitmq {
+        queueBind {
             queue = "test-queue"
             exchange = "test-exchange"
             routingKey = "test-routing-key"
